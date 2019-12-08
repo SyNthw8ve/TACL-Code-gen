@@ -1,0 +1,67 @@
+
+import java_cup.runtime.*;
+
+import java.io.InputStreamReader;
+import nodes.*;
+
+parser code {:
+  public static void main(String args[]) throws Exception {
+    IR ir = new IR(new Yylex(new InputStreamReader(System.in)));
+    Symbol result = null;
+
+    try {
+      result = ir.parse();
+    }
+    catch(Exception e) {
+      System.err.print("** Caught: ");
+      e.printStackTrace();
+    }
+
+    if (result != null && result.sym == sym.EOF)
+      System.exit(0);
+    else
+      System.exit(1);
+  }
+
+  public void report_error(String message, Object error_info) {
+    Symbol info = (Symbol) error_info;
+
+    System.err.print(message + ": line " + (info.right + 1) + ": " );
+    System.err.println("unexpected token `" + info.value + "'");
+  }
+
+  public void report_fatal_error(String message, Object _ignore) {
+    System.err.println(message);
+  }
+:} ;
+
+terminal I_LIT, R_LIT, ID;
+terminal LS_PAR, RS_PAR, L_PAR, R_PAR, COL;
+terminal ID_K, VAR, FUN, INT, BOOL, REAL;
+terminal I_TEMP, R_TEMP, LABEL;
+terminal IR_STORE;
+
+terminal I_ADD, I_SUB, I_MUL, I_DIV, I_INV, I_COPY, MOD;
+terminal I_EQ, I_NE, I_LT, I_LE;
+
+terminal I_VAL, I_GLOAD, I_LLOAD, I_ALOAD, I_GSTORE, I_LSTORE, I_ASTORE;
+terminal I_CALL, I_RET;
+
+terminal R_ADD, R_SUB, R_MUL, R_DIV, R_INV, R_COPY;
+terminal R_EQ, R_NE, R_LT, R_LE;
+
+terminal R_VAL, R_GLOAD, R_LLOAD, R_ALOAD, R_GSTORE, R_LSTORE, R_ASTORE;
+terminal R_CALL, R_RET;
+
+terminal P_CALL, P_RET;
+
+terminal ITOR;
+terminal NOT;
+
+terminal JUMP, CJUMP;
+terminal I_PRINT, B_PRINT, R_PRINT, I_READ, B_READ, R_READ;
+
+non terminal program;
+
+program ::=     LABEL I_LIT COL {: System.out.println("Label"); :}
+                | I_TEMP I_LIT {: System.out.println("Hello"); :};

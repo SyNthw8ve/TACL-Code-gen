@@ -1,4 +1,6 @@
-*.java
+IR.java
+sym.java
+Yylex.java
 /examples
 *.pdf
 *.jar
