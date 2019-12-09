@@ -36,7 +36,7 @@ parser code {:
 :} ;
 
 terminal I_LIT, R_LIT, ID, B_LIT;
-terminal LS_PAR, RS_PAR, L_PAR, R_PAR, COL;
+terminal LS_PAR, RS_PAR, L_PAR, R_PAR, COL, COMMA;
 terminal ID_K, VAR, FUN, FUNCTION, INT, BOOL, REAL, VOID;
 terminal I_TEMP, R_TEMP, LABEL;
 terminal IR_STORE;
@@ -62,7 +62,9 @@ terminal JUMP, CJUMP;
 terminal I_PRINT, B_PRINT, R_PRINT, I_READ, B_READ, R_READ;
 
 non terminal program, global_decs, global_dec, ir_decs, ir_dec;
-non terminal type, intial_value, formals, locals, pair, function_head;
+non terminal ir_statements, ir_statement, ret_statement, ir_expr, int_expr, real_expr, jump_expr, ret_expr, call_expr;
+non terminal type, intial_value, formals, locals, pair, function_head, function_body;
+non terminal label, int_temp, real_temp, actual_arg, actual_args, more_actual_args, io_expr;
 
 program ::= global_decs ir_decs;
 
@@ -79,10 +81,110 @@ ir_decs ::= 	ir_dec ir_decs
 			|	
 			;
 
-ir_dec ::= 	function_head
+ir_dec ::= 	function_head function_body
 			;
 
 function_head ::= FUNCTION ID;
+
+function_body ::= ir_statements ret_statement
+				;
+
+ir_statements ::= 	ir_statement ir_statements
+				| 
+				;
+
+ir_statement ::= 	ir_expr
+				;
+
+ret_statement ::= 	ret_expr
+					;
+
+ret_expr ::=	I_RET int_temp
+			|	R_RET real_temp
+			|	P_RET
+			;
+
+int_temp ::=	I_TEMP
+			;
+
+real_temp ::=	R_TEMP
+			;
+
+ir_expr ::= 	int_expr
+			|	real_expr
+			|	jump_expr
+			|	call_expr
+			|	io_expr
+			;
+
+int_expr ::=	int_temp IR_STORE I_VAL I_LIT
+			|	int_temp IR_STORE I_GLOAD ID
+			|	int_temp IR_STORE I_LLOAD ID
+			|	int_temp IR_STORE I_ALOAD ID
+			|	ID IR_STORE I_GSTORE int_temp
+			|	ID IR_STORE I_LSTORE int_temp
+			|	ID IR_STORE I_ASTORE int_temp
+			|	int_temp IR_STORE I_ADD int_temp COMMA int_temp
+			|	int_temp IR_STORE I_SUB int_temp COMMA int_temp
+			|	int_temp IR_STORE I_MUL int_temp COMMA int_temp
+			|	int_temp IR_STORE I_DIV int_temp COMMA int_temp
+			|	int_temp IR_STORE MOD int_temp COMMA int_temp
+			|	int_temp IR_STORE I_INV int_temp
+			|	int_temp IR_STORE NOT int_temp
+			|	int_temp IR_STORE I_EQ int_temp COMMA int_temp
+			|	int_temp IR_STORE I_LT int_temp COMMA int_temp
+			|	int_temp IR_STORE I_NE int_temp COMMA int_temp
+			|	int_temp IR_STORE I_LE int_temp COMMA int_temp
+			|	int_temp IR_STORE I_COPY int_temp
+			;
+
+real_expr ::=	real_temp IR_STORE ITOR int_temp
+			|	real_temp IR_STORE R_VAL R_LIT
+			|	real_temp IR_STORE R_GLOAD ID
+			|	real_temp IR_STORE R_LLOAD ID
+			|	real_temp IR_STORE R_ALOAD ID
+			|	ID IR_STORE R_GSTORE real_temp
+			|	ID IR_STORE R_LSTORE real_temp
+			|	ID IR_STORE R_ASTORE real_temp
+			|	real_temp IR_STORE R_ADD real_temp COMMA real_temp
+			|	real_temp IR_STORE R_SUB real_temp COMMA real_temp
+			|	real_temp IR_STORE R_MUL real_temp COMMA real_temp
+			|	real_temp IR_STORE R_DIV real_temp COMMA real_temp
+			|	real_temp IR_STORE R_INV real_temp
+			|	int_temp IR_STORE R_EQ real_temp COMMA real_temp
+			|	int_temp IR_STORE R_LT real_temp COMMA real_temp
+			|	int_temp IR_STORE R_NE real_temp COMMA real_temp
+			|	int_temp IR_STORE R_LE real_temp COMMA real_temp
+			|	real_temp IR_STORE R_COPY real_temp
+			;
+
+jump_expr ::=	CJUMP int_temp COMMA LABEL COMMA LABEL
+			|	JUMP LABEL
+			;
+
+call_expr ::= 	int_temp IR_STORE I_CALL ID COMMA LS_PAR actual_args RS_PAR
+			|	real_temp IR_STORE R_CALL ID LS_PAR actual_args RS_PAR
+			|	P_CALL ID LS_PAR actual_args RS_PAR
+			;
+
+actual_arg ::= 	int_temp
+			|	real_temp
+			;
+more_actual_args ::= COMMA actual_arg more_actual_args
+				|
+				;
+
+actual_args ::= actual_arg more_actual_args
+			|
+			;
+
+io_expr ::= I_PRINT int_temp
+		|	B_PRINT int_temp
+		|	R_PRINT real_temp
+		|	int_temp IR_STORE I_READ
+		|	int_temp IR_STORE B_READ
+		|	real_temp IR_STORE R_READ
+		;
 
 type ::= 	INT
 		|	REAL

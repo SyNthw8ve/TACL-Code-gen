@@ -32,6 +32,7 @@ true|false { return token(sym.B_LIT); }
 "(" { return token(sym.L_PAR); }
 ")" { return token(sym.R_PAR); }
 ":" { return token(sym.COL); }
+"," { return token(sym.COMMA); }
 
 "id" { return token(sym.ID_K); }
 "var" { return token(sym.VAR); }
@@ -43,9 +44,9 @@ true|false { return token(sym.B_LIT); }
 "real" { return token(sym.REAL); }
 "void" { return token(sym.VOID); }
 
-"t" { return token(sym.I_TEMP); }
-"fp" { return token(sym.R_TEMP); }
-"l" { return token(sym.LABEL); }
+t[0-9]+ { return token(sym.I_TEMP); }
+fp[0-9]+ { return token(sym.R_TEMP); }
+l[0-9]+ { return token(sym.LABEL); }
 
 "<-" { return token(sym.IR_STORE); }
 
@@ -67,7 +68,7 @@ mod   { return token(sym.MOD); }
 
 not   { return token(sym.NOT); }
 
-i_value { return token(sym.I_VAL); }
+"i_value" { return token(sym.I_VAL); }
 
 i_gload { return token(sym.I_GLOAD); }
 i_lload { return token(sym.I_LLOAD); }
@@ -78,7 +79,7 @@ i_lstore { return token(sym.I_LSTORE); }
 i_astore { return token(sym.I_ASTORE); }
 
 i_call { return token(sym.I_CALL); }
-i_return { return token(sym.I_RET); }
+"i_return" { return token(sym.I_RET); }
 
 //SECTION: Real
 
