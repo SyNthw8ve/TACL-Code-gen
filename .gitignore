@@ -5,3 +5,5 @@ Yylex.java
 *.pdf
 *.jar
 *.class
+*.out
+*.java~
