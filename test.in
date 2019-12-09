@@ -1,3 +1,5 @@
 (id @h var bool)
 (id @n var real 10.0)
-(id @twice fun int [(int @n)] [])
+(id @twice fun int [(int @n)] [(bool @t)])
+
+function @twice

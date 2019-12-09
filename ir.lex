@@ -27,7 +27,6 @@ import java_cup.runtime.Symbol;
 
 true|false { return token(sym.B_LIT); }
 
-"@" { return token(sym.TAG); }
 "[" { return token(sym.LS_PAR); }
 "]" { return token(sym.RS_PAR); }
 "(" { return token(sym.L_PAR); }
@@ -37,6 +36,7 @@ true|false { return token(sym.B_LIT); }
 "id" { return token(sym.ID_K); }
 "var" { return token(sym.VAR); }
 "fun" { return token(sym.FUN); }
+"function" { return token(sym.FUNCTION); }
 
 "int" { return token(sym.INT); }
 "bool" { return token(sym.BOOL); }
@@ -133,4 +133,4 @@ r_read { return token(sym.R_READ); }
 
 [0-9]+ { return token(sym.I_LIT, new Integer(yytext())); }
 [0-9]+\.[0-9]+ { return token(sym.R_LIT, new Double(yytext())); }
-[_a-zA-Z][_a-zA-Z0-9]* { return token(sym.ID, yytext()); }
+\@[_a-zA-Z][_a-zA-Z0-9]* { return token(sym.ID, yytext()); }
