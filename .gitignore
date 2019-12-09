@@ -4,3 +4,4 @@ Yylex.java
 /examples
 *.pdf
 *.jar
+*.class

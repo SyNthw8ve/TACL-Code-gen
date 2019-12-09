@@ -35,9 +35,9 @@ parser code {:
   }
 :} ;
 
-terminal I_LIT, R_LIT, ID;
+terminal I_LIT, R_LIT, ID, B_LIT;
 terminal LS_PAR, RS_PAR, L_PAR, R_PAR, COL;
-terminal ID_K, VAR, FUN, INT, BOOL, REAL;
+terminal ID_K, VAR, FUN, INT, BOOL, REAL, VOID, TAG;
 terminal I_TEMP, R_TEMP, LABEL;
 terminal IR_STORE;
 
@@ -61,7 +61,38 @@ terminal NOT;
 terminal JUMP, CJUMP;
 terminal I_PRINT, B_PRINT, R_PRINT, I_READ, B_READ, R_READ;
 
-non terminal program;
+non terminal program, global_decs, global_dec;
+non terminal type, intial_value, formals, locals, pair;
 
-program ::=     LABEL I_LIT COL {: System.out.println("Label"); :}
-                | I_TEMP I_LIT {: System.out.println("Hello"); :};
+program ::= global_decs;
+
+global_decs ::=    	global_dec global_decs
+                	|   
+					;
+
+global_dec ::=  L_PAR ID_K TAG ID VAR type R_PAR
+			|	L_PAR ID_K TAG ID VAR type intial_value R_PAR
+			|	L_PAR ID_K TAG ID FUN type LS_PAR formals RS_PAR LS_PAR locals RS_PAR R_PAR
+			;
+
+type ::= 	INT
+		|	REAL
+		|	BOOL
+		|	VOID
+		;
+
+intial_value ::= 	I_LIT
+				| 	R_LIT
+				|	B_LIT
+				;
+
+formals ::=		pair formals {: :}
+			|	{: :}
+			;
+
+locals ::=		pair locals {: :}
+			|	{: :}
+			;
+
+pair ::= 	L_PAR type TAG ID R_PAR {: :}
+			;

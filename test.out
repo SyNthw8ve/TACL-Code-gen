@@ -1,0 +1,2 @@
+jflex -q ir.lex
+javac -classpath ./cup.jar: IR.java Yylex.java
