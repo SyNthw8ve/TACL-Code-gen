@@ -2,7 +2,7 @@ package classes.nodes;
 
 class Type {
 
-    enum Types {
+    public enum Types {
 
         INT, VOID, BOOL
     }

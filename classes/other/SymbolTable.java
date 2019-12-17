@@ -17,6 +17,7 @@ public class SymbolTable {
     public void add(String name, Info entry) {
 
         this.h.put(name, entry);
+        
     }
 
     public Info get(String name) {

@@ -12,7 +12,7 @@ CUP_JAR = ./cup.jar
 
 CLASSPATH = $(CUP_JAR):
 
-$(PARSER).class : $(PARSER).java Yylex.java
+$(PARSER).class : $(PARSER).java Yylex.java ./classes/nodes/*.java ./classes/other/*.java
 	$(JAVAC) $^
 
 $(PARSER).java sym.java : ir.cup

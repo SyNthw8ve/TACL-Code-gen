@@ -5,7 +5,7 @@ package classes.other;
  */
 public class Pair {
 
-    enum Type { INT, BOOL };
+    public enum Type { INT, BOOL };
 
     String name;
     Type type;

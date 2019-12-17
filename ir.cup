@@ -2,18 +2,31 @@
 import java_cup.runtime.*;
 
 import java.io.InputStreamReader;
-import nodes.*;
+import classes.other.*;
+import classes.nodes.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 parser code {:
+
+  SymbolTable symbol_table = new SymbolTable();
+
   public static void main(String args[]) throws Exception {
+
     IR ir = new IR(new Yylex(new InputStreamReader(System.in)));
+
     Symbol result = null;
 
     try {
+
       result = ir.parse();
+
     }
     catch(Exception e) {
+
       System.err.print("** Caught: ");
+
       e.printStackTrace();
     }
 
@@ -33,10 +46,10 @@ parser code {:
   public void report_fatal_error(String message, Object _ignore) {
     System.err.println(message);
   }
-:} ;
+:};
 
-terminal ID ID;
-terminal I_LIT, B_LIT;
+terminal String ID;
+terminal Integer I_LIT, B_LIT;
 terminal LS_PAR, RS_PAR, L_PAR, R_PAR, COL, COMMA, NEG;
 terminal ID_K, VAR, FUN, FUNCTION, INT, BOOL, VOID;
 terminal I_TEMP, LABEL;
@@ -55,22 +68,25 @@ terminal NOT;
 terminal JUMP, CJUMP;
 terminal I_PRINT, B_PRINT, I_READ, B_READ;
 
-non terminal Program program;
-non terminal GlobalDec global_decs, global_dec;
-non terminal IRDec ir_decs, ir_dec;
+non terminal program;
+non terminal global_decs, global_dec;
+non terminal Integer intial_value;
+non terminal List<Pair> formals, locals;
+non terminal Pair pair;
+non terminal ir_decs, ir_dec;
 
 non terminal ir_statements, ir_statement, ir_expr, int_expr, jump_expr, ret_expr, call_expr;
-non terminal type, intial_value, formals, locals, pair, function_head, function_body;
+non terminal type, function_head, function_body;
 non terminal int_temp, actual_arg, actual_args, more_actual_args, io_expr;
 
-program ::= global_decs:g ir_decs:i {: RESULT = new Program(g, i) :};
+program ::= global_decs ir_decs:i {::};
 
-global_decs ::=    	global_dec:d global_decs:ds {: RESULT = new GlobalDec(d, ds) :}
+global_decs ::=    	global_dec:d global_decs:ds {: :}
                 	|   
 					;
 
-global_dec ::=  L_PAR ID_K ID:s VAR type:t R_PAR {: RESULT = new GlobalDecNoVal(s, t) :}
-			|	L_PAR ID_K ID:s VAR type:t intial_value:v R_PAR
+global_dec ::=  L_PAR ID_K ID:s VAR type:t R_PAR {:Info i = new Info(Info.Type.VAR, null, null, null); parser.symbol_table.add(s, i);:}
+			|	L_PAR ID_K ID:s VAR type:t intial_value:v R_PAR {:Info i = new Info(Info.Type.VAR, null, null, v); parser.symbol_table.add(s, i);:}
 			|	L_PAR ID_K ID FUN type LS_PAR formals RS_PAR LS_PAR locals RS_PAR R_PAR
 			;
 
@@ -156,23 +172,24 @@ io_expr ::= I_PRINT int_temp
 		|	int_temp IR_STORE B_READ
 		;
 
-type ::= 	INT {: RESULT = new Type(); :}
-		|	BOOL {: RESULT =  new Type(); :}
-		|	VOID {: RESULT = new Type(); :}
+type ::= 	INT {::}
+		|	BOOL {::}
+		|	VOID {::}
 		;
 
-intial_value ::= 	I_LIT
-				|  	NEG I_LIT
-				|	B_LIT
+intial_value ::= 	I_LIT:i {:RESULT = i;:}
+				|  	NEG I_LIT:i {:RESULT = -1*i;:}
+				|	B_LIT:b {:RESULT = b;:}
 				;
 
-formals ::=		pair formals {: :}
-			|	{: :}
+formals ::=		pair:p formals:f {: f.add(p); RESULT = f; :}
+			|	{: RESULT = new LinkedList<Pair>(); :}
 			;
 
-locals ::=		pair locals {: :}
-			|	{: :}
+locals ::=		pair:p locals:l {: l.add(p); RESULT = l; :}
+			|	{: RESULT = new LinkedList<Pair>(); :}
 			;
 
-pair ::= 	L_PAR type ID R_PAR {: :}
+pair ::= 		L_PAR INT ID:s R_PAR {: RESULT = new Pair(s, Pair.Type.INT); :}
+			|	L_PAR BOOL ID:s R_PAR {: RESULT = new Pair(s, Pair.Type.BOOL); :}
 			;

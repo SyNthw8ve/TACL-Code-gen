@@ -1,6 +1,6 @@
 package classes.nodes;
 
-class ID {
+public class ID {
 
     public String id;
 
