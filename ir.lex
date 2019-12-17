@@ -25,7 +25,15 @@ import java_cup.runtime.Symbol;
 %%
 //SECTION: IR related
 
-true|false { return token(sym.B_LIT); }
+true|false { 
+  
+  if (yytext() == "true") {
+
+    return token(sym.B_LIT, new Integer(1));
+  }
+
+  return token(sym.B_LIT, new Integer(0));  
+}
 
 "[" { return token(sym.LS_PAR); }
 "]" { return token(sym.RS_PAR); }
@@ -33,6 +41,7 @@ true|false { return token(sym.B_LIT); }
 ")" { return token(sym.R_PAR); }
 ":" { return token(sym.COL); }
 "," { return token(sym.COMMA); }
+"-" { return token(sym.NEG); }
 
 "id" { return token(sym.ID_K); }
 "var" { return token(sym.VAR); }
