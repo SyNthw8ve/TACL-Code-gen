@@ -1,11 +1,11 @@
 package classes.nodes;
 
-class Temp {
+public class Temp {
 
-    public int temp_numb;
+    public String temp;
 
-    public Temp() {
+    public Temp(String t) {
 
-        
+        this.temp = t;
     }
 }

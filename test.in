@@ -16,7 +16,7 @@ l0: t4 <- i_aload @n
     t9 <- i_mul t4, t8
     @r <- i_lstore t9
 l1: t10 <- i_lload @r
-    i_return t10
+l3: i_return t10
 
 function @main
     t0 <- i_value 10

@@ -29,3 +29,7 @@ run : $(PARSER).class
 clean: 
 	rm *.class
 	rm *.java~
+	cd classes/nodes/
+	rm *.class
+	cd ../other
+	rm *.class

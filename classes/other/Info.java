@@ -7,7 +7,7 @@ import java.util.LinkedList;
  */
 public class Info {
 
-    public enum Type { VAR, FUNCTION };
+    public enum Type { VAR, FUN };
 
     Type kind;
     LinkedList<Pair> args;

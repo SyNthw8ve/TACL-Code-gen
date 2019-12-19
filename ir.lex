@@ -41,7 +41,6 @@ true|false {
 ")" { return token(sym.R_PAR); }
 ":" { return token(sym.COL); }
 "," { return token(sym.COMMA); }
-"-" { return token(sym.NEG); }
 
 "id" { return token(sym.ID_K); }
 "var" { return token(sym.VAR); }
@@ -107,5 +106,5 @@ b_read { return token(sym.B_READ); }
 
 [\ \t\n]+		{ /* and whitespace */ }
 
-[0-9]+ { return token(sym.I_LIT, new Integer(yytext())); }
+\-?[0-9]+ { return token(sym.I_LIT, new Integer(yytext())); }
 \@[_a-zA-Z][_a-zA-Z0-9]* { return token(sym.ID, yytext()); }
