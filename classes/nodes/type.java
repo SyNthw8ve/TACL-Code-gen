@@ -1,14 +1,16 @@
 package classes.nodes;
 
-class Type {
+public class Type {
 
     public enum Types {
 
         INT, VOID, BOOL
     }
     
-    public Type() {
+    Types val_type;
 
+    public Type(Types t) {
 
+        this.val_type = t;
     }
 }

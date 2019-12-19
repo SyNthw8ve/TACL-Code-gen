@@ -19,7 +19,6 @@ parser code {:
     try {
 
       result = ir.parse();
-
     }
     catch(Exception e) {
 
@@ -65,56 +64,57 @@ terminal NOT;
 terminal JUMP, CJUMP;
 terminal I_PRINT, B_PRINT, I_READ, B_READ;
 
-non terminal program;
-non terminal global_decs, global_dec;
+non terminal LinkedList<GlobalDec> global_decs;
+non terminal GlobalDec global_dec;
 non terminal Integer intial_value;
 non terminal LinkedList<Pair> formals, locals;
 non terminal Pair pair;
 non terminal LinkedList<Label> labels;
 non terminal LinkedList<Temp> actual_args, more_actual_args;
 
-non terminal ir_decs, ir_dec;
+non terminal IRDec ir_dec;
+non terminal LinkedList<IRDec> ir_decs, root;
 
 non terminal Temp int_temp, actual_arg;
 
-non terminal ir_statements;
-
+non terminal LinkedList<Statement> ir_statements, function_body;
+non terminal Type type;
 non terminal Node ir_expr, jump_expr, call_expr, io_expr, ret_expr, int_expr;
-non terminal type, function_head, function_body;
+non terminal Head function_head;
 
-program ::= global_decs ir_decs:i {::};
+root ::= global_decs:g ir_decs:i {: RESULT = i; TreeWalk t = new TreeWalk(parser.symbol_table, i, g); t.walk();:};
 
-global_decs ::=    	global_dec global_decs
-                	|   
+global_decs ::=    	global_dec:g global_decs:gs {: gs.addFirst(g); RESULT = gs; :}
+                	|   {: RESULT = new LinkedList<GlobalDec>(); :}
 					;
 
-global_dec ::=  L_PAR ID_K ID:s VAR type:t R_PAR {: Info i = new Info(Info.Type.VAR, null, null, null); 
-																		parser.symbol_table.add(s, i);:}
+global_dec ::=  L_PAR ID_K ID:s VAR type:t R_PAR {: Info i = new Info(Info.Types.VAR, null, null, null, t); 
+																		parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}
 			|	L_PAR ID_K ID:s VAR type:t intial_value:v R_PAR 
-			{: Info i = new Info(Info.Type.VAR, null, null, v);
-				parser.symbol_table.add(s, i);:}
-			|	L_PAR ID_K ID:s FUN type LS_PAR formals:f RS_PAR LS_PAR locals:l RS_PAR R_PAR {: Info i = new Info(Info.Type.FUN, f, l, null); 
-																								parser.symbol_table.add(s, i); :}
+			{: Info i = new Info(Info.Types.VAR, null, null, v, t);
+				parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}
+			|	L_PAR ID_K ID:s FUN type:t LS_PAR formals:f RS_PAR LS_PAR locals:l RS_PAR R_PAR {: Info i = new Info(Info.Types.FUN, f, l, null, t); 
+																								parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}
 			;
 
-ir_decs ::= ir_dec ir_decs
-			|	
+ir_decs ::= ir_dec:d ir_decs:ds {: ds.addFirst(d); RESULT = ds; :}
+			|	{: RESULT = new LinkedList<IRDec>(); :}
 			;
 
-ir_dec ::= 	function_head function_body
+ir_dec ::= 	function_head:h function_body:b {: RESULT = new IRDec(h, b); :}
 			;
 
-function_head ::= FUNCTION ID;
+function_head ::= FUNCTION ID:s {: RESULT = new Head(s); :};
 
-function_body ::= ir_statements
+function_body ::= ir_statements:s {: RESULT = s; :}
 				;
 
-ir_statements ::= labels ir_expr ir_statements
-				| 
+ir_statements ::= labels:l ir_expr:e ir_statements:s {: Statement st = new Statement(l, e); s.addFirst(st); RESULT = s; :}
+				| {: RESULT =  new LinkedList<Statement>(); :}
 				;
 
 labels ::= 	{: RESULT = new LinkedList<Label>(); :}
-			| LABEL:s COL labels:l {: Label la = new Label(s); l.add(la); RESULT = l; :}
+			| LABEL:s COL labels:l {: Label la = new Label(s); l.addFirst(la); RESULT = l; :}
 			;
 
 ret_expr ::=	I_RET int_temp:t  {: RESULT = new Return(t); :}
@@ -132,13 +132,13 @@ ir_expr ::= 	int_expr:e {:RESULT = e;:}
 			|	ret_expr:e {:RESULT = e;:}
 			;
 
-int_expr ::=	int_temp IR_STORE I_VAL I_LIT
-			|	int_temp IR_STORE I_GLOAD ID
-			|	int_temp IR_STORE I_LLOAD ID
-			|	int_temp IR_STORE I_ALOAD ID
-			|	ID IR_STORE I_GSTORE int_temp
-			|	ID IR_STORE I_LSTORE int_temp
-			|	ID IR_STORE I_ASTORE int_temp
+int_expr ::=	int_temp:t IR_STORE I_VAL I_LIT:i {: RESULT = new Value(t, i); :}
+			|	int_temp:t IR_STORE I_GLOAD ID:s {: RESULT = new Store(Store.Type.GLOBAL, s, t); :}
+			|	int_temp:t IR_STORE I_LLOAD ID:s {: RESULT = new Store(Store.Type.LOCAL, s, t); :}
+			|	int_temp:t IR_STORE I_ALOAD ID:s {: RESULT = new Store(Store.Type.ARG, s, t); :}
+			|	ID:s IR_STORE I_GSTORE int_temp:t {: RESULT = new Load(Load.Type.GLOBAL, s, t); :}
+			|	ID:s IR_STORE I_LSTORE int_temp:t {: RESULT = new Load(Load.Type.LOCAL, s, t); :}
+			|	ID:s IR_STORE I_ASTORE int_temp:t {: RESULT = new Load(Load.Type.ARG, s, t); :}
 			|	int_temp:t IR_STORE I_ADD int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_ADD, t, t1, t2); :}
 			|	int_temp:t IR_STORE I_SUB int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_SUB, t, t1, t2); :}
 			|	int_temp:t IR_STORE I_MUL int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_MUL, t, t1, t2); :}
@@ -163,11 +163,11 @@ call_expr ::= 	int_temp:tt IR_STORE I_CALL ID:n COMMA LS_PAR actual_args:al RS_P
 
 actual_arg ::= 	int_temp:t {: RESULT = t; :} ;
 
-more_actual_args ::= COMMA actual_arg:a more_actual_args:al {: al.add(a); RESULT = al; :}
+more_actual_args ::= COMMA actual_arg:a more_actual_args:al {: al.addFirst(a); RESULT = al; :}
 				| {: RESULT = new LinkedList<Temp>(); :}
 				;
 
-actual_args ::= actual_arg:a more_actual_args:al {: al.add(a); RESULT = al; :}
+actual_args ::= actual_arg:a more_actual_args:al {: al.addFirst(a); RESULT = al; :}
 			| {: RESULT = new LinkedList<Temp>(); :}
 			;
 
@@ -177,20 +177,20 @@ io_expr ::= I_PRINT int_temp:t {: RESULT = new Print(Print.Type.INT, t); :}
 		|	int_temp:t IR_STORE B_READ {: RESULT = new Read(Read.Type.BOOL, t); :}
 		;
 
-type ::= 	INT {::}
-		|	BOOL {::}
-		|	VOID {::}
+type ::= 	INT {: RESULT = new Type(Type.Types.INT); :}
+		|	BOOL {: RESULT = new Type(Type.Types.BOOL); :}
+		|	VOID {: RESULT = new Type(Type.Types.VOID); :}
 		;
 
 intial_value ::= 	I_LIT:i {:RESULT = i;:}
 				|	B_LIT:b {:RESULT = b;:}
 				;
 
-formals ::=		pair:p formals:f {: f.add(p); RESULT = f; :}
+formals ::=		pair:p formals:f {: f.addFirst(p); RESULT = f; :}
 			|	{: RESULT = new LinkedList<Pair>(); :}
 			;
 
-locals ::=		pair:p locals:l {: l.add(p); RESULT = l; :}
+locals ::=		pair:p locals:l {: l.addFirst(p); RESULT = l; :}
 			|	{: RESULT = new LinkedList<Pair>(); :}
 			;
 
