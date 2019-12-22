@@ -8,7 +8,7 @@ import classes.nodes.Type;
  */
 public class Info {
 
-    public enum Types { VAR, FUN };
+    public enum Types { VAR, FUN, VAR_INIT };
 
     Types kind;
     Type val_type;
@@ -23,5 +23,22 @@ public class Info {
         this.locals = locals;
         this.val = init;
         this.val_type = t;
+    }
+
+    public void emit() {
+
+        switch (this.kind) {
+
+            case VAR:
+                
+                break;
+        
+            case VAR_INIT:
+
+                break;
+
+            default:
+                break;
+        }
     }
 }

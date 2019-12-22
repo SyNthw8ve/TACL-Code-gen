@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Store
  */
-public class Store extends Node{
+public class Store implements Node{
 
     public enum Type { GLOBAL, LOCAL, ARG, };
 
@@ -16,5 +16,11 @@ public class Store extends Node{
         this.op_type = type;
         this.id = name;
         this.t_target = t;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

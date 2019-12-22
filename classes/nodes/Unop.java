@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Unop
  */
-public class Unop extends Node {
+public class Unop implements Node {
 
     public enum Type { I_INV, NOT, I_COPY, };
 
@@ -16,5 +16,11 @@ public class Unop extends Node {
         this.op_type = t;
         this.t_store = target;
         this.t_op = t1;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

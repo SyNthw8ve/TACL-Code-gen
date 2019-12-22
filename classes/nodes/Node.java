@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Node
  */
-public class Node {
+public interface Node {
 
-    
+    public void emit();
 }

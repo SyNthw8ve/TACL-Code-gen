@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Value
  */
-public class Value extends Node {
+public class Value implements Node {
 
     public Integer value;
     public Temp target;
@@ -12,6 +12,12 @@ public class Value extends Node {
 
         this.target = t;
         this.value = v;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 
 }

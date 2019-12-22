@@ -91,7 +91,7 @@ global_decs ::=    	global_dec:g global_decs:gs {: gs.addFirst(g); RESULT = gs; 
 global_dec ::=  L_PAR ID_K ID:s VAR type:t R_PAR {: Info i = new Info(Info.Types.VAR, null, null, null, t); 
 																		parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}
 			|	L_PAR ID_K ID:s VAR type:t intial_value:v R_PAR 
-			{: Info i = new Info(Info.Types.VAR, null, null, v, t);
+			{: Info i = new Info(Info.Types.VAR_INIT, null, null, v, t);
 				parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}
 			|	L_PAR ID_K ID:s FUN type:t LS_PAR formals:f RS_PAR LS_PAR locals:l RS_PAR R_PAR {: Info i = new Info(Info.Types.FUN, f, l, null, t); 
 																								parser.symbol_table.add(s, i); RESULT = new GlobalDec(s);:}

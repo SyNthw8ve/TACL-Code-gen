@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Print
  */
-public class Print extends Node {
+public class Print implements Node {
 
     public enum Type { INT, BOOL, };
 
@@ -14,5 +14,11 @@ public class Print extends Node {
 
         this.print_type = t;
         this.to_print = target;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

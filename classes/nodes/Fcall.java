@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * Fcall
  */
-public class Fcall extends Node {
+public class Fcall implements Node {
 
     public String id;
     public LinkedList<Temp> arg_list;
@@ -16,5 +16,11 @@ public class Fcall extends Node {
         this.id = name;
         this.arg_list = args;
         this.target_temp = t;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

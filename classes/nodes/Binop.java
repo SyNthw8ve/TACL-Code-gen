@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Binop
  */
-public class Binop extends Node {
+public class Binop implements Node {
 
     public enum Type { I_ADD, I_SUB, I_MUL, I_DIV, MOD, I_EQ, I_LT, I_NE, I_LE, };
 
@@ -19,4 +19,11 @@ public class Binop extends Node {
         this.t_t1 = t1;
         this.t_t2 = t2;
     }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
+    }
+    
 }

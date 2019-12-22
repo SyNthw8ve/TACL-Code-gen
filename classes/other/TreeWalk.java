@@ -23,13 +23,22 @@ public class TreeWalk {
 
     public void walk() {
 
+
+        this.emit_global();
+        
+    }
+
+    public void emit_global() {
+
+        System.out.println("\t.data");
+
         for(GlobalDec i : this.g_tree) {
 
-            if(this.symbol_table.get(i.id).kind == Info.Types.VAR) {
+            Info g_var = this.symbol_table.get(i.id);
 
-                System.out.println(i.id);
-            }
-
+            g_var.emit();
         }
+
+        System.out.println("\t.text");
     }
 }

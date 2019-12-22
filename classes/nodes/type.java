@@ -13,4 +13,21 @@ public class Type {
 
         this.val_type = t;
     }
+
+    public void emit() {
+
+        switch (val_type) {
+            
+            case INT:
+                
+                break;
+
+            case BOOL:
+                
+                break;
+        
+            default:
+                break;
+        }
+    }
 }

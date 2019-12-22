@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Read
  */
-public class Read extends Node {
+public class Read implements Node {
 
     public enum Type { INT, BOOL, };
 
@@ -14,5 +14,11 @@ public class Read extends Node {
 
         this.read_type = r;
         this.store_temp = t;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

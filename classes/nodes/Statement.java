@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * Statement
  */
-public class Statement extends Node {
+public class Statement implements Node {
 
     public LinkedList<Label> labels;
     public Node expr;
@@ -14,5 +14,11 @@ public class Statement extends Node {
 
         this.labels = l;
         this.expr = e;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }

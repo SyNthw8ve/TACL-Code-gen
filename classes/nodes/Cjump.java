@@ -3,7 +3,7 @@ package classes.nodes;
 /**
  * Cjump
  */
-public class Cjump extends Node {
+public class Cjump implements Node {
 
     public Temp t_cond;
     public Label l_true;
@@ -14,5 +14,11 @@ public class Cjump extends Node {
         this.t_cond = t;
         this.l_true = lt;
         this.l_false = lf;
+    }
+
+    @Override
+    public void emit() {
+        // TODO Auto-generated method stub
+
     }
 }
