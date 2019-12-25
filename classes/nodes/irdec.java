@@ -15,4 +15,14 @@ public class IRDec {
         this.head = h;
         this.body = b;
     }
+
+    public void emit() {
+
+        
+
+        for(Statement s : this.body) {
+
+            s.emit();
+        }
+    }
 }

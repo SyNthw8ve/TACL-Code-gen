@@ -23,9 +23,9 @@ public class TreeWalk {
 
     public void walk() {
 
-
         this.emit_global();
-        
+
+        this.emit_code();
     }
 
     public void emit_global() {
@@ -36,9 +36,19 @@ public class TreeWalk {
 
             Info g_var = this.symbol_table.get(i.id);
 
-            g_var.emit();
+            String name = i.id.split("@")[1];
+            
+            g_var.emit(name);
         }
+    }
+
+    public void emit_code() {
 
         System.out.println("\t.text");
+
+        for(IRDec d : this.tree) {
+
+            d.emit();
+        }
     }
 }

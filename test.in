@@ -1,5 +1,5 @@
-(id @h var bool)
-(id @a var int)
+(id @h var bool true)
+(id @a var int -11)
 (id @twice fun int [(int @n)] [(bool @t)])
 
 function @factorial

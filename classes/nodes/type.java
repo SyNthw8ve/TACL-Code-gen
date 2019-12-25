@@ -20,9 +20,13 @@ public class Type {
             
             case INT:
                 
+                System.out.println("\t.space 4");
+
                 break;
 
             case BOOL:
+                
+                System.out.println("\t.space 4");
                 
                 break;
         

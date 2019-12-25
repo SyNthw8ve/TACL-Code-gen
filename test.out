@@ -1,2 +1,4 @@
-jflex -q ir.lex
-javac -classpath ./cup.jar: IR.java Yylex.java
+	.data
+h:	.word 1
+a:	.word -11
+	.text

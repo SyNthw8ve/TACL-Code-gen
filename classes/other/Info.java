@@ -25,15 +25,23 @@ public class Info {
         this.val_type = t;
     }
 
-    public void emit() {
+    public void emit(String name) {
 
         switch (this.kind) {
 
             case VAR:
                 
+                System.out.print(name + ":");
+
+                this.val_type.emit();
+
                 break;
         
             case VAR_INIT:
+
+                System.out.print(name + ":");
+
+                System.out.println("\t.word " + val.toString());
 
                 break;
 

@@ -24,7 +24,7 @@ Yylex.java : ir.lex
 
 
 run : $(PARSER).class
-	@$(JAVA) $(PARSER) < test.in
+	@$(JAVA) $(PARSER) < test.in > test.out
 
 clean: 
 	rm *.class

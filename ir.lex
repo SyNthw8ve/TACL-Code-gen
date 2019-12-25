@@ -27,7 +27,7 @@ import java_cup.runtime.Symbol;
 
 true|false { 
   
-  if (yytext() == "true") {
+  if (yytext().compareTo("true") == 0) {
 
     return token(sym.B_LIT, new Integer(1));
   }
