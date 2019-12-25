@@ -16,7 +16,24 @@ public class Value implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String temp = this.target.emit();
+
+        int val = this.value.intValue();
+
+        if (val > 65536) {
+
+            int upper = val / 65536;
+            int lower = val % 65536;
+
+            System.out.println("\tlui " + temp + " ," + upper);
+            System.out.println("\tori " + temp + " ," + temp + " ," + lower);
+        }
+
+        else {
+
+            System.out.println("\tori " + temp + " ,$0" + " ," + val);
+        }
 
     }
 

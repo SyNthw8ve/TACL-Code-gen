@@ -22,7 +22,67 @@ public class Binop implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String dest = this.t_target.emit();
+        String t1 = this.t_t1.emit();
+        String t2 = this.t_t2.emit();
+
+        switch(this.op_type) {
+
+            case I_ADD:
+
+                System.out.println("\taddu " + dest + " ," + t1 + " ," + t2);
+
+                break;
+
+            case I_SUB:
+
+                System.out.println("\tsubu " + dest + " ," + t1 + " ," + t2);
+
+                break;
+        
+            case I_MUL:
+
+                System.out.println("\tmulu " + t1 + " ," + t2);
+                System.out.println("\tmflo " + dest);
+
+                break;
+
+            case I_DIV:
+
+                System.out.println("\tdiv " + t1 + " ," + t2);
+                System.out.println("\tmflo " + dest);
+
+                break;
+
+            case MOD:
+
+                System.out.println("\tdiv " + t1 + " ," + t2);
+                System.out.println("\tmfhi " + dest);
+
+                break;
+
+            case I_EQ:
+
+                break;
+
+            case I_LE:
+
+                System.out.println("\tslt " + dest + " ," + t2 + " ," + t1);
+                System.out.println("\tnor " + dest + " ," + dest + " ," + dest);
+
+                break;
+
+            case I_LT:
+
+                System.out.println("\tslt " + dest + " ," + t1 + " ," + t2);
+
+                break;
+
+            case I_NE:
+
+                break;
+        }
 
     }
     

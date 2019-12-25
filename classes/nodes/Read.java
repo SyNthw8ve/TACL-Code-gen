@@ -18,7 +18,26 @@ public class Read implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String t_name = this.store_temp.emit();
+
+        switch(this.read_type) {
+
+            case INT:
+
+                System.out.println("\ti_read$ " + t_name);
+
+                break;
+
+            case BOOL:
+
+                System.out.println("\tb_read$ " + t_name);
+
+                break;
+
+            default:
+                break;
+        }
 
     }
 }

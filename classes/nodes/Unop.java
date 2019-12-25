@@ -20,7 +20,33 @@ public class Unop implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String tt = this.t_store.emit();
+        String t1 = this.t_op.emit();
+
+        switch(this.op_type) {
+
+            case I_COPY:
+
+                System.out.println("\tor " + tt + " ," + t1 + " ,$0");
+
+                break;
+
+            case I_INV:
+
+                System.out.println("\tsubu " + tt + " ,$0" + " ," + t1);
+
+                break;
+
+            case NOT:
+
+                System.out.println("\tnor " + tt + " ," + t1 + " ," + t1);
+
+                break;
+
+            default:
+                break;
+        }
 
     }
 }

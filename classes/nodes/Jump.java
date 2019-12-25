@@ -14,7 +14,10 @@ public class Jump implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String l = this.label.emit();
+
+        System.out.println("\tj " + l);
 
     }
 }

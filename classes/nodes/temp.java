@@ -8,4 +8,9 @@ public class Temp {
 
         this.temp = t;
     }
+
+    public String emit() {
+
+        return "$" + this.temp;
+    }
 }

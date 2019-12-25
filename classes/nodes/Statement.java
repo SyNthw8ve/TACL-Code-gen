@@ -18,7 +18,13 @@ public class Statement implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        for(Label l : this.labels) {
 
+            String name = l.emit();
+            System.out.print(name + ":");
+        }
+
+        expr.emit();
     }
 }

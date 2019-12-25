@@ -18,7 +18,12 @@ public class Cjump implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String tt = t_cond.emit();
+        String lt = l_true.emit();
+        String lf = l_false.emit();
 
+        System.out.println("\tbne " + tt + ", $0" + ", " + lt);
+        System.out.println("\tj " + lf);
     }
 }

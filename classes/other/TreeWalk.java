@@ -23,6 +23,8 @@ public class TreeWalk {
 
     public void walk() {
 
+        System.out.println(".include \"tacl-io.asm\"");
+
         this.emit_global();
 
         this.emit_code();

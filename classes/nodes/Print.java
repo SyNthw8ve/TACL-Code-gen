@@ -18,7 +18,26 @@ public class Print implements Node {
 
     @Override
     public void emit() {
-        // TODO Auto-generated method stub
+        
+        String t_name = this.to_print.emit();
+
+        switch(this.print_type) {
+
+            case INT:
+
+                System.out.println("\ti_print$ " + t_name);
+
+                break;
+
+            case BOOL:
+
+                System.out.println("\tb_print$ " + t_name);
+
+                break;
+
+            default:
+                break;
+        }
 
     }
 }
