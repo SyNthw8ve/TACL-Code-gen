@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -25,63 +27,58 @@ public class Binop implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String dest = this.t_target.emit();
-        String t1 = this.t_t1.emit();
-        String t2 = this.t_t2.emit();
+        RegisterAlloc.temp_use(2);
+        RegisterAlloc.new_alloc(this.t_target);
+
+        String dest = RegisterAlloc.get_alloc(this.t_target);
+        String t1 = RegisterAlloc.get_alloc(this.t_t1);
+        String t2 = RegisterAlloc.get_alloc(this.t_t2);
 
         switch(this.op_type) {
 
             case I_ADD:
 
-                System.out.println("\taddu " + dest + " ," + t1 + " ," + t2);
-
+                PrintCode.print_binop("addu", dest, t1, t2);
                 break;
 
             case I_SUB:
 
-                System.out.println("\tsubu " + dest + " ," + t1 + " ," + t2);
-
+                PrintCode.print_binop("subu", dest, t1, t2);
                 break;
         
             case I_MUL:
 
-                System.out.println("\tmulu " + t1 + " ," + t2);
-                System.out.println("\tmflo " + dest);
-
+                PrintCode.print_unop("mulu", t1, t2);
+                PrintCode.print_op("mflo", dest);
                 break;
 
             case I_DIV:
 
-                System.out.println("\tdiv " + t1 + " ," + t2);
-                System.out.println("\tmflo " + dest);
-
+                PrintCode.print_unop("div", t1, t2);
+                PrintCode.print_op("mflo", dest);
                 break;
 
             case MOD:
 
-                System.out.println("\tdiv " + t1 + " ," + t2);
-                System.out.println("\tmfhi " + dest);
-
+                PrintCode.print_unop("div", t1, t2);
+                PrintCode.print_op("mfhi", dest);
                 break;
 
             case I_EQ:
 
-                System.out.println("\txor " + dest + " ," + t2 + " ," + t1);
-                System.out.println("\tsltiu " + dest + " ," + dest + " , 1");
-
+                PrintCode.print_binop("xor", dest, t1, t2);
+                PrintCode.print_binop("sltiu", dest, dest, 1);
                 break;
 
             case I_LE:
 
-                System.out.println("\tslt " + dest + " ," + t2 + " ," + t1);
-                System.out.println("\tnor " + dest + " ," + dest + " ," + dest);
-
+                PrintCode.print_binop("slt", dest, t2, t1);
+                PrintCode.print_binop("nor", dest, dest, dest);
                 break;
 
             case I_LT:
 
-                System.out.println("\tslt " + dest + " ," + t1 + " ," + t2);
-
+                PrintCode.print_binop("slt", dest, t1, t2);
                 break;
 
             case I_NE:

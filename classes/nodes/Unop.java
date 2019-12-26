@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -23,27 +25,27 @@ public class Unop implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String tt = this.t_store.emit();
-        String t1 = this.t_op.emit();
+        RegisterAlloc.temp_use(1);
+        RegisterAlloc.new_alloc(this.t_store);
+
+        String tt = RegisterAlloc.get_alloc(this.t_store);
+        String t1 = RegisterAlloc.get_alloc(this.t_op);
 
         switch(this.op_type) {
 
             case I_COPY:
 
-                System.out.println("\tor " + tt + " ," + t1 + " ,$0");
-
+                PrintCode.print_binop("or", tt, t1, "$0");
                 break;
 
             case I_INV:
 
-                System.out.println("\tsubu " + tt + " ,$0" + " ," + t1);
-
+                PrintCode.print_binop("or", tt, "$0", t1);
                 break;
 
             case NOT:
 
-                System.out.println("\tnor " + tt + " ," + t1 + " ," + t1);
-
+                PrintCode.print_binop("nor", tt, t1, t1);
                 break;
 
             default:

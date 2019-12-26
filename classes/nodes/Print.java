@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -21,20 +23,19 @@ public class Print implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String t_name = this.to_print.emit();
+        RegisterAlloc.temp_use(1);
+        String t_name = RegisterAlloc.get_alloc(this.to_print);
 
         switch(this.print_type) {
 
             case INT:
 
-                System.out.println("\ti_print$ " + t_name);
-
+                PrintCode.print_op("i_print$", t_name);
                 break;
 
             case BOOL:
 
-                System.out.println("\tb_print$ " + t_name);
-
+                PrintCode.print_op("b_print$", t_name);
                 break;
 
             default:

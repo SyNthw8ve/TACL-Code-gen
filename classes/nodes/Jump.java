@@ -1,5 +1,6 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
 import classes.other.SymbolTable;
 
 /**
@@ -18,9 +19,7 @@ public class Jump implements Node {
     public void emit(SymbolTable s) {
         
         String l = this.label.emit();
-
-        System.out.println("\tj " + l);
-
+        PrintCode.print_jump("j", l);
     }
 
     @Override

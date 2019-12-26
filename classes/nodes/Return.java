@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -25,9 +27,10 @@ public class Return implements Node {
         
         if(this.return_temp != null) {
 
-            String t_ret = this.return_temp.emit();
+            RegisterAlloc.temp_use(1);
 
-            System.out.println("\tor $v0, $0, " + t_ret);
+            String t_ret = RegisterAlloc.get_alloc(this.return_temp);
+            PrintCode.print_binop("or", "$v0", "$0", t_ret);
         }
 
     }

@@ -1,6 +1,8 @@
 package classes.nodes;
 
 import classes.other.Info;
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -28,9 +30,10 @@ public class Load implements Node {
 
     @Override
     public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
 
-        String tt = this.t_target.emit();
+        RegisterAlloc.new_alloc(this.t_target);
+
+        String tt = RegisterAlloc.get_alloc(this.t_target);
         Info i = s.get(h.id);
         int index;
 
@@ -40,24 +43,21 @@ public class Load implements Node {
 
                 String g_name = this.id.split("@")[1];
 
-                System.out.println("\tlw " + tt + " ," + g_name);
-
+                PrintCode.print_mem("lw", tt, g_name);
                 break;
 
             case LOCAL:
 
                 index = i.get_local_pos(this.id);
 
-                System.out.println("\tlw " + tt + " ," + index + "($fp)");
-
+                PrintCode.print_mem("lw", tt, index, "$fp");
                 break;
 
             case ARG:
 
                 index = i.get_arg_pos(this.id);
 
-                System.out.println("\tlw " + tt + " ," + index + "($fp)");
-
+                PrintCode.print_mem("lw", tt, index, "$fp");
                 break;
 
             default:

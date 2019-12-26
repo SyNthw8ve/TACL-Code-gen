@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -21,12 +23,13 @@ public class Cjump implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String tt = t_cond.emit();
+        RegisterAlloc.temp_use(1);
+
+        String tt = RegisterAlloc.get_alloc(this.t_cond);
         String lt = l_true.emit();
         String lf = l_false.emit();
 
-        System.out.println("\tbne " + tt + ", $0" + ", " + lt);
-        System.out.println("\tj " + lf);
+        PrintCode.print_cond_jump(tt, "$0", lt, lf);
     }
 
     @Override

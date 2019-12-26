@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -19,7 +21,9 @@ public class Value implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String temp = this.target.emit();
+        RegisterAlloc.new_alloc(this.target);
+
+        String temp = RegisterAlloc.get_alloc(this.target);
 
         int val = this.value.intValue();
 
@@ -28,13 +32,13 @@ public class Value implements Node {
             int upper = val / 65536;
             int lower = val % 65536;
 
-            System.out.println("\tlui " + temp + " ," + upper);
-            System.out.println("\tori " + temp + " ," + temp + " ," + lower);
+            PrintCode.print_unop("lui", temp, upper);
+            PrintCode.print_binop("ori", temp, temp, lower);
         }
 
         else {
 
-            System.out.println("\tori " + temp + " ,$0" + " ," + val);
+            PrintCode.print_binop("ori", temp, "$0", val);
         }
 
     }

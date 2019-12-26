@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.PrintCode;
+import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
 
 /**
@@ -21,20 +23,19 @@ public class Read implements Node {
     @Override
     public void emit(SymbolTable s) {
         
-        String t_name = this.store_temp.emit();
+        RegisterAlloc.new_alloc(this.store_temp);
+        String t_name = RegisterAlloc.get_alloc(this.store_temp);
 
         switch(this.read_type) {
 
             case INT:
 
-                System.out.println("\ti_read$ " + t_name);
-
+                PrintCode.print_op("i_read$", t_name);
                 break;
 
             case BOOL:
 
-                System.out.println("\tb_read$ " + t_name);
-
+                PrintCode.print_op("b_read$", t_name);
                 break;
 
             default:
