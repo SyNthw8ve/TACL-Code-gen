@@ -2,6 +2,10 @@
 	.data
 	.text
 factorial:
+	sw $fp, -4($sp)
+	addiu $fp, $sp, -4
+	sw $ra, -4($fp)
+	addiu $sp, $fp, -8
 	ori $t0 ,$0 ,1
 	sw $t0 ,-8($fp)
 	lw $t1 ,4($fp)
@@ -17,8 +21,21 @@ l$0:	lw $t4 ,4($fp)
 	mflo $t9
 	sw $t9 ,-8($fp)
 l$1:	lw $t10 ,-8($fp)
+	or $v0, $0, $t10
+	lw $ra, -4($fp)
+	addiu $sp, $fp, 8
+	lw $fp, 0($fp)
+	jr $ra
 
 main:
+	sw $fp, -4($sp)
+	addiu $fp, $sp, -4
+	sw $ra, -4($fp)
+	addiu $sp, $fp, -4
 	ori $t0 ,$0 ,10
 	i_print$ $t1
+	lw $ra, -4($fp)
+	addiu $sp, $fp, 4
+	lw $fp, 0($fp)
+	jr $ra
 

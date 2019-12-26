@@ -28,7 +28,8 @@ public class Fcall implements Node {
 
     @Override
     public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
+        
+        
 
     }
 }

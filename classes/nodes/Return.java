@@ -22,7 +22,13 @@ public class Return implements Node {
 
     @Override
     public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
         
+        if(this.return_temp != null) {
+
+            String t_ret = this.return_temp.emit();
+
+            System.out.println("\tor $v0, $0, " + t_ret);
+        }
+
     }
 }

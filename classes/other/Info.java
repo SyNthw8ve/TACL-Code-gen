@@ -79,4 +79,9 @@ public class Info {
 
         return pos;
     }
+
+    public int get_local_num() {
+
+        return -(1 + this.locals.size())*4;
+    }
 }
