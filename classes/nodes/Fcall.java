@@ -29,7 +29,20 @@ public class Fcall implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        
+        for(Temp t : this.arg_list) {
 
+            String temp = t.emit();
+
+            System.out.println("\taddiu $sp, $sp, -4");
+            System.out.println("\tsw " + temp + ", 0($sp)");
+        }
+
+        String fname = this.id.split("@")[1];
+
+        System.out.println("\tjal " + fname);
+        
+        String ret_t = this.target_temp.emit();
+
+        System.out.println("\tor " + ret_t + " , $0, $v0");
     }
 }
