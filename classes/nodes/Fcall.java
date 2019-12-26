@@ -29,9 +29,9 @@ public class Fcall implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        for(Temp t : this.arg_list) {
+        for(int i = this.arg_list.size() - 1; i >= 0; i--) {
 
-            String temp = t.emit();
+            String temp = this.arg_list.get(i).emit();
 
             System.out.println("\taddiu $sp, $sp, -4");
             System.out.println("\tsw " + temp + ", 0($sp)");
