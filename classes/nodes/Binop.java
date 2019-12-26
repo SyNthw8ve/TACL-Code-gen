@@ -66,6 +66,9 @@ public class Binop implements Node {
 
             case I_EQ:
 
+                System.out.println("\txor " + dest + " ," + t2 + " ," + t1);
+                System.out.println("\tsltiu " + dest + " ," + dest + " , 1");
+
                 break;
 
             case I_LE:

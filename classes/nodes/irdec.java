@@ -30,6 +30,7 @@ public class IRDec {
         System.out.println("\tsw $ra, -4($fp)");
 
         int num_locals = i.get_local_num();
+        int num_args = i.get_args_num();
 
         System.out.println("\taddiu $sp, $fp, " + num_locals);
 
@@ -39,7 +40,7 @@ public class IRDec {
         }
 
         System.out.println("\tlw $ra, -4($fp)");
-        System.out.println("\taddiu $sp, $fp, " + -1*num_locals);
+        System.out.println("\taddiu $sp, $fp, " + (-1*num_locals + num_args));
         System.out.println("\tlw $fp, 0($fp)");
         System.out.println("\tjr $ra");
         

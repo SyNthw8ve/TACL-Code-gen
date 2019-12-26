@@ -41,8 +41,11 @@ public class Fcall implements Node {
 
         System.out.println("\tjal " + fname);
         
-        String ret_t = this.target_temp.emit();
+        if (this.target_temp != null) {
 
-        System.out.println("\tor " + ret_t + " , $0, $v0");
+            String ret_t = this.target_temp.emit();
+
+            System.out.println("\tor " + ret_t + " , $0, $v0");
+        }
     }
 }

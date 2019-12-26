@@ -158,7 +158,7 @@ jump_expr ::=	CJUMP int_temp:t COMMA LABEL:l1 COMMA LABEL:l2 {: Label lt = new L
 			;
 
 call_expr ::= 	int_temp:tt IR_STORE I_CALL ID:n COMMA LS_PAR actual_args:al RS_PAR {: RESULT = new Fcall(n, al, tt); :}
-			|	P_CALL ID:n LS_PAR actual_args:al RS_PAR {: RESULT = new Fcall(n, al, null); :}
+			|	P_CALL ID:n COMMA LS_PAR actual_args:al RS_PAR {: RESULT = new Fcall(n, al, null); :}
 			;
 
 actual_arg ::= 	int_temp:t {: RESULT = t; :} ;

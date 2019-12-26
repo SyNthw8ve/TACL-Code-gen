@@ -84,4 +84,9 @@ public class Info {
 
         return -(1 + this.locals.size())*4;
     }
+
+    public int get_args_num() {
+
+        return (this.args.size())*4;
+    }
 }
