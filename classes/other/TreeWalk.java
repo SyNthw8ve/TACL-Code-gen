@@ -50,7 +50,7 @@ public class TreeWalk {
 
         for(IRDec d : this.tree) {
 
-            d.emit();
+            d.emit(this.symbol_table);
         }
     }
 }

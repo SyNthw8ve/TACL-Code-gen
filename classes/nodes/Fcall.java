@@ -2,6 +2,8 @@ package classes.nodes;
 
 import java.util.LinkedList;
 
+import classes.other.SymbolTable;
+
 /**
  * Fcall
  */
@@ -19,7 +21,13 @@ public class Fcall implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
         // TODO Auto-generated method stub
 
     }

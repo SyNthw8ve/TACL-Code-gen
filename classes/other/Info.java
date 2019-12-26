@@ -49,4 +49,34 @@ public class Info {
                 break;
         }
     }
+
+    public int get_local_pos(String name) {
+
+        int pos = -1;
+
+        for(int i = 0; i < this.locals.size(); i++) {
+
+            if (this.locals.get(i).name.compareTo(name) == 0) {
+
+                return -(i + 2)*4;
+            }
+        }
+
+        return pos;
+    }
+
+    public int get_arg_pos(String name) {
+
+        int pos = -1;
+
+        for(int i = 0; i < this.args.size(); i++) {
+
+            if (this.args.get(i).name.compareTo(name) == 0) {
+
+                return (i + 1)*4;
+            }
+        }
+
+        return pos;
+    }
 }

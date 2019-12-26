@@ -1,20 +1,23 @@
 .include "tacl-io.asm"
 	.data
-h:	.word 1
-a:	.word -11
 	.text
 factorial:
-	lui $t0 ,1
-	ori $t0 ,$t0 ,4001
+	ori $t0 ,$0 ,1
+	sw $t0 ,-8($fp)
+	lw $t1 ,4($fp)
 	ori $t2 ,$0 ,0
 	slt $t3 ,$t2 ,$t1
 	bne $t3, $0, l$0
 	j l$1
-l$0:	ori $t6 ,$0 ,1
+l$0:	lw $t4 ,4($fp)
+	lw $t5 ,4($fp)
+	ori $t6 ,$0 ,1
 	subu $t7 ,$t5 ,$t6
 	mulu $t4 ,$t8
 	mflo $t9
-l$1:l$3:
+	sw $t9 ,-8($fp)
+l$1:	lw $t10 ,-8($fp)
+
 main:
 	ori $t0 ,$0 ,10
 	i_print$ $t1

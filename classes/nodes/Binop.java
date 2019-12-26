@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Binop
  */
@@ -21,7 +23,7 @@ public class Binop implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String dest = this.t_target.emit();
         String t1 = this.t_t1.emit();
@@ -84,6 +86,12 @@ public class Binop implements Node {
                 break;
         }
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+        this.emit(s);
     }
     
 }

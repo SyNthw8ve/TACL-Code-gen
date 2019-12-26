@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Jump
  */
@@ -13,11 +15,17 @@ public class Jump implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String l = this.label.emit();
 
         System.out.println("\tj " + l);
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+        this.emit(s);
     }
 }

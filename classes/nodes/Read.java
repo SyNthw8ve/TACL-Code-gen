@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Read
  */
@@ -17,7 +19,7 @@ public class Read implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String t_name = this.store_temp.emit();
 
@@ -39,5 +41,11 @@ public class Read implements Node {
                 break;
         }
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+        this.emit(s);
     }
 }

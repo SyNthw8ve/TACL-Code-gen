@@ -2,6 +2,8 @@ package classes.nodes;
 
 import java.util.LinkedList;
 
+import classes.other.SymbolTable;
+
 /**
  * IRDec
  */
@@ -16,15 +18,15 @@ public class IRDec {
         this.body = b;
     }
 
-    public void emit() {
+    public void emit(SymbolTable st) {
 
-        this.head.emit();
+        this.head.emit(st);
 
         //TODO: print prologue function
 
         for(Statement s : this.body) {
 
-            s.emit();
+            s.emit(st, this.head);
         }
 
         //TODO: print epilogue function

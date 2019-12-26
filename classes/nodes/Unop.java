@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Unop
  */
@@ -19,7 +21,7 @@ public class Unop implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String tt = this.t_store.emit();
         String t1 = this.t_op.emit();
@@ -48,5 +50,12 @@ public class Unop implements Node {
                 break;
         }
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+
+        this.emit(s);
     }
 }

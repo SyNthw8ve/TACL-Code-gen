@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Value
  */
@@ -15,7 +17,7 @@ public class Value implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String temp = this.target.emit();
 
@@ -35,6 +37,13 @@ public class Value implements Node {
             System.out.println("\tori " + temp + " ,$0" + " ," + val);
         }
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+
+        this.emit(s);
     }
 
 }

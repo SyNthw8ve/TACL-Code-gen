@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Return
  */
@@ -13,8 +15,14 @@ public class Return implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+        
     }
 }

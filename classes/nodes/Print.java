@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import classes.other.SymbolTable;
+
 /**
  * Print
  */
@@ -17,7 +19,7 @@ public class Print implements Node {
     }
 
     @Override
-    public void emit() {
+    public void emit(SymbolTable s) {
         
         String t_name = this.to_print.emit();
 
@@ -39,5 +41,11 @@ public class Print implements Node {
                 break;
         }
 
+    }
+
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        // TODO Auto-generated method stub
+        this.emit(s);
     }
 }

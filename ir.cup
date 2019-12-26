@@ -133,12 +133,12 @@ ir_expr ::= 	int_expr:e {:RESULT = e;:}
 			;
 
 int_expr ::=	int_temp:t IR_STORE I_VAL I_LIT:i {: RESULT = new Value(t, i); :}
-			|	int_temp:t IR_STORE I_GLOAD ID:s {: RESULT = new Store(Store.Type.GLOBAL, s, t); :}
-			|	int_temp:t IR_STORE I_LLOAD ID:s {: RESULT = new Store(Store.Type.LOCAL, s, t); :}
-			|	int_temp:t IR_STORE I_ALOAD ID:s {: RESULT = new Store(Store.Type.ARG, s, t); :}
-			|	ID:s IR_STORE I_GSTORE int_temp:t {: RESULT = new Load(Load.Type.GLOBAL, s, t); :}
-			|	ID:s IR_STORE I_LSTORE int_temp:t {: RESULT = new Load(Load.Type.LOCAL, s, t); :}
-			|	ID:s IR_STORE I_ASTORE int_temp:t {: RESULT = new Load(Load.Type.ARG, s, t); :}
+			|	int_temp:t IR_STORE I_GLOAD ID:s {: RESULT = new Load(Load.Type.GLOBAL, s, t); :}
+			|	int_temp:t IR_STORE I_LLOAD ID:s {: RESULT = new Load(Load.Type.LOCAL, s, t); :}
+			|	int_temp:t IR_STORE I_ALOAD ID:s {: RESULT = new Load(Load.Type.ARG, s, t); :}
+			|	ID:s IR_STORE I_GSTORE int_temp:t {: RESULT = new Store(Store.Type.GLOBAL, s, t); :}
+			|	ID:s IR_STORE I_LSTORE int_temp:t {: RESULT = new Store(Store.Type.LOCAL, s, t); :}
+			|	ID:s IR_STORE I_ASTORE int_temp:t {: RESULT = new Store(Store.Type.ARG, s, t); :}
 			|	int_temp:t IR_STORE I_ADD int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_ADD, t, t1, t2); :}
 			|	int_temp:t IR_STORE I_SUB int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_SUB, t, t1, t2); :}
 			|	int_temp:t IR_STORE I_MUL int_temp:t1 COMMA int_temp:t2 {: RESULT = new Binop(Binop.Type.I_MUL, t, t1, t2); :}
