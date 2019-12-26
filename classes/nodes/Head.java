@@ -16,7 +16,14 @@ public class Head implements Node {
 
     public void emit(SymbolTable s) {
 
-        System.out.println(this.id.split("@")[1] + ":");
+        String name = this.id.split("@")[1];
+
+        if (name.compareTo("main") == 0) {
+
+            System.out.println("\t.globl main");
+        }
+
+        System.out.print(name + ":");
     }
 
     @Override

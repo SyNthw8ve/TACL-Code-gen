@@ -1,9 +1,9 @@
-.include "tacl-io.asm"
 	.data
 n:	.word 26
+	.include "tacl-io.asm"
+
 	.text
-sub:
-	sw      $fp, -4($sp)
+sub:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
 	addiu   $sp, $fp, -4   
@@ -16,8 +16,8 @@ sub:
 	lw      $fp, 0($fp)
 	jr      $ra
 
-fibonacci:
-	sw      $fp, -4($sp)
+	.text
+fibonacci:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
 	addiu   $sp, $fp, -8   
@@ -72,8 +72,9 @@ l$2:	lw      $t0, -8($fp)
 	lw      $fp, 0($fp)
 	jr      $ra
 
-main:
-	sw      $fp, -4($sp)
+	.text
+	.globl main
+main:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
 	addiu   $sp, $fp, -8   

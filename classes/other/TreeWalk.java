@@ -23,9 +23,9 @@ public class TreeWalk {
 
     public void walk() {
 
-        System.out.println(".include \"tacl-io.asm\"");
-
         this.emit_global();
+
+        System.out.println("\t.include \"tacl-io.asm\"\n");
 
         this.emit_code();
     }
@@ -46,9 +46,9 @@ public class TreeWalk {
 
     public void emit_code() {
 
-        System.out.println("\t.text");
-
         for(IRDec d : this.tree) {
+
+            System.out.println("\t.text");
 
             d.emit(this.symbol_table);
         }
