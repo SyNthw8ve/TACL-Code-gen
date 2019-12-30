@@ -63,7 +63,7 @@ public class Store implements Node{
     @Override
     public void pre_process() {
         
-        RegisterAlloc.temp_use(1);
+        RegisterAlloc.temp_used_pro(1);
 
     }
 }

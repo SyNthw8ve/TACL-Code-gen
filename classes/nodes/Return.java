@@ -35,7 +35,7 @@ public class Return implements Node {
        
         if(this.return_temp != null) {
 
-            RegisterAlloc.temp_use(1);
+            RegisterAlloc.temp_used_pro(1);
         }
     }
 }

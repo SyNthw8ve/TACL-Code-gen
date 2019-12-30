@@ -57,7 +57,7 @@ public class Unop implements Node {
     @Override
     public void pre_process() {
         
-        RegisterAlloc.temp_use(1);
+        RegisterAlloc.temp_used_pro(1);
         RegisterAlloc.new_alloc();
     }
 }

@@ -68,7 +68,7 @@ public class Fcall implements Node {
     @Override
     public void pre_process() {
         
-        RegisterAlloc.temp_use(this.arg_list.size());
+        RegisterAlloc.temp_used_pro(this.arg_list.size());
 
         if (this.target_temp != null) {
 

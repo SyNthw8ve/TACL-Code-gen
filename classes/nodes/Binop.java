@@ -92,7 +92,7 @@ public class Binop implements Node {
     @Override
     public void pre_process() {
         
-        RegisterAlloc.temp_use(2);
+        RegisterAlloc.temp_used_pro(2);
         RegisterAlloc.new_alloc();
 
     }
