@@ -25,7 +25,7 @@ public class Binop implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
+    public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.temp_use(2);
         RegisterAlloc.new_alloc(this.t_target);
@@ -48,7 +48,7 @@ public class Binop implements Node {
         
             case I_MUL:
 
-                PrintCode.print_unop("mulu", t1, t2);
+                PrintCode.print_unop("mult", t1, t2);
                 PrintCode.print_op("mflo", dest);
                 break;
 
@@ -88,10 +88,13 @@ public class Binop implements Node {
 
     }
 
+
     @Override
-    public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
-        this.emit(s);
+    public void pre_process() {
+        
+        RegisterAlloc.temp_use(2);
+        RegisterAlloc.new_alloc();
+
     }
     
 }

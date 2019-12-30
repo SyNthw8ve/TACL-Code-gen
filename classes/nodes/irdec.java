@@ -25,7 +25,12 @@ public class IRDec {
 
         RegisterAlloc.reset();
 
-        this.head.emit(st);
+        for(Statement s : this.body) {
+
+            s.pre_process();
+        }
+
+        this.head.emit(st, this.head);
 
         Info i = st.get(this.head.id);
 

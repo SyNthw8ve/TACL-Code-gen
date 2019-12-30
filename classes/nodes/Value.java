@@ -19,7 +19,7 @@ public class Value implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
+    public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.new_alloc(this.target);
 
@@ -44,10 +44,9 @@ public class Value implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
-
-        this.emit(s);
+    public void pre_process() {
+        
+        RegisterAlloc.new_alloc();
     }
 
 }

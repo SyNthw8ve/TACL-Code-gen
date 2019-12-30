@@ -7,6 +7,6 @@ import classes.other.SymbolTable;
  */
 public interface Node {
 
-    public void emit(SymbolTable s);
     public void emit(SymbolTable s, Head h);
+    public void pre_process();
 }

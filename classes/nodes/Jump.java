@@ -16,15 +16,15 @@ public class Jump implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
+    public void emit(SymbolTable s, Head h) {
         
         String l = this.label.emit();
         PrintCode.print_jump("j", l);
     }
 
     @Override
-    public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
-        this.emit(s);
+    public void pre_process() {
+        
+
     }
 }

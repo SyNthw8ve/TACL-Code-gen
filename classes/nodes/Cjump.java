@@ -21,7 +21,7 @@ public class Cjump implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
+    public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.temp_use(1);
 
@@ -33,8 +33,8 @@ public class Cjump implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
-        this.emit(s);
+    public void pre_process() {
+        
+        RegisterAlloc.temp_use(1);
     }
 }

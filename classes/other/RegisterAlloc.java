@@ -9,13 +9,25 @@ import classes.nodes.Temp;
  */
 public class RegisterAlloc {
 
-    public static HashMap<String, Integer> alloced =  new HashMap<>();
-    public final int K = 10;
+    public static final int K = 9;
+
     public static int n = 0;
+    public static int spilled = 0;
+
+    public static HashMap<String, TempRec> temps_alloced =  new HashMap<>();
+    public static RegisterRec[] registers = new RegisterRec[K];
 
     public RegisterAlloc() {
 
 
+    }
+
+    public static void init_registers() {
+
+        for(int i = 0; i < K; i++) {
+
+            registers[i] = new RegisterRec(i);
+        }
     }
 
     public static void temp_use(int temps) {
@@ -28,20 +40,42 @@ public class RegisterAlloc {
         return n;
     }
 
+    public static void new_alloc() {
+
+        if (n < K) {
+
+            n++;
+        }
+
+        else {
+
+            spilled++;
+        }
+    }
+
     public static void new_alloc(Temp t) {
 
-        alloced.put(t.temp, n);
+        if (n < K) {
 
-        n++;
+            temps_alloced.put(t.temp, new TempRec(n));
+
+            n++;
+        }
+
+        else {
+
+            
+        }
     }
 
     public static String get_alloc(Temp t) {
 
-        return  "$t" + alloced.get(t.temp).toString();
+        return  "$t" + temps_alloced.get(t.temp).ass_register;
     }
 
     public static void reset() {
 
         n = 0;
+        temps_alloced = new HashMap<>();
     }
 }

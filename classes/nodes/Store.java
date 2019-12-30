@@ -24,12 +24,6 @@ public class Store implements Node{
     }
 
     @Override
-    public void emit(SymbolTable s) {
-        
-
-    }
-
-    @Override
     public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.temp_use(1);
@@ -64,5 +58,12 @@ public class Store implements Node{
             default:
                 break;
         }
+    }
+
+    @Override
+    public void pre_process() {
+        
+        RegisterAlloc.temp_use(1);
+
     }
 }

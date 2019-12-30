@@ -24,11 +24,6 @@ public class Load implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
-        
-    }
-
-    @Override
     public void emit(SymbolTable s, Head h) {
 
         RegisterAlloc.new_alloc(this.t_target);
@@ -63,5 +58,12 @@ public class Load implements Node {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void pre_process() {
+        
+        RegisterAlloc.new_alloc();
+
     }
 }

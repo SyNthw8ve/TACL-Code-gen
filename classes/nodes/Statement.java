@@ -19,18 +19,6 @@ public class Statement implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
-        
-        for(Label l : this.labels) {
-
-            String name = l.emit();
-            System.out.print(name + ":");
-        }
-
-        expr.emit(s);
-    }
-
-    @Override
     public void emit(SymbolTable s, Head h) {
         // TODO Auto-generated method stub
 
@@ -41,5 +29,11 @@ public class Statement implements Node {
         }
 
         expr.emit(s, h);
+    }
+
+    @Override
+    public void pre_process() {
+        
+        expr.pre_process();
     }
 }

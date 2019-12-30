@@ -21,7 +21,7 @@ public class Print implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
+    public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.temp_use(1);
         String t_name = RegisterAlloc.get_alloc(this.to_print);
@@ -45,8 +45,8 @@ public class Print implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
-        this.emit(s);
+    public void pre_process() {
+        
+        RegisterAlloc.temp_use(1);
     }
 }

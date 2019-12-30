@@ -23,12 +23,6 @@ public class Fcall implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void emit(SymbolTable s, Head h) {
         
         RegisterAlloc.temp_use(this.arg_list.size());
@@ -69,5 +63,17 @@ public class Fcall implements Node {
             PrintCode.print_mem("lw", "$t" + i, 0, "$sp");
             PrintCode.print_binop("addiu", "$sp", "$sp", 4);
         }
+    }
+
+    @Override
+    public void pre_process() {
+        
+        RegisterAlloc.temp_use(this.arg_list.size());
+
+        if (this.target_temp != null) {
+
+            RegisterAlloc.new_alloc();
+        }
+
     }
 }

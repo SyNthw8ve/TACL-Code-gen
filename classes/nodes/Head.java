@@ -14,8 +14,9 @@ public class Head implements Node {
         this.id = name;
     }
 
-    public void emit(SymbolTable s) {
-
+    @Override
+    public void emit(SymbolTable s, Head h) {
+        
         String name = this.id.split("@")[1];
 
         if (name.compareTo("main") == 0) {
@@ -27,8 +28,8 @@ public class Head implements Node {
     }
 
     @Override
-    public void emit(SymbolTable s, Head h) {
+    public void pre_process() {
         // TODO Auto-generated method stub
-        this.emit(s);
+
     }
 }
