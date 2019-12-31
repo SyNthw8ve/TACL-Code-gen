@@ -29,12 +29,17 @@ public class IRDec {
         PrintCode.print_binop("addiu", "$sp", "$fp", num_locals + num_temps);
     }
 
-    public void epilogue(int num_args) {
+    public void epilogue(int num_args, String head) {
 
         PrintCode.print_mem("lw", "$ra", -4, "$fp");
         PrintCode.print_binop("addiu", "$sp", "$fp", num_args);
         PrintCode.print_mem("lw", "$fp", 0, "$fp");
-        PrintCode.print_jump("jr", "$ra");
+
+        if(head.compareTo("main") != 0) {
+
+            PrintCode.print_jump("jr", "$ra");
+        }
+
     }
 
     public int get_temp_num() {
@@ -70,7 +75,7 @@ public class IRDec {
             s.emit(st, this.head);
         }
 
-        this.epilogue(num_args);
+        this.epilogue(num_args, this.head.get_id());
         
         System.out.println();
     }

@@ -27,6 +27,11 @@ public class Head implements Node {
         System.out.print(name + ":");
     }
 
+    public String get_id() {
+
+        return this.id.split("@")[1];
+    }
+
     @Override
     public void pre_process() {
         // TODO Auto-generated method stub

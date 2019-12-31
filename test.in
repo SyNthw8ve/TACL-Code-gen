@@ -19,7 +19,7 @@ l1:	t10 <- i_lload @r
 	i_return t10
 
 function @main
-	t0 <- i_value 10
+	t0 <- i_value 3
 	t1 <- i_call @factorial, [t0]
 	i_print t1
 	return

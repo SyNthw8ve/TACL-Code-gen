@@ -27,12 +27,15 @@ public class Binop implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
+        RegisterAlloc.check_spilled(this.t_t1);
+        RegisterAlloc.check_spilled(this.t_t2);
+
         RegisterAlloc.temp_use(2);
         RegisterAlloc.new_alloc(this.t_target);
 
-        String dest = RegisterAlloc.get_alloc(this.t_target);
         String t1 = RegisterAlloc.get_alloc(this.t_t1);
         String t2 = RegisterAlloc.get_alloc(this.t_t2);
+        String dest = RegisterAlloc.get_alloc(this.t_target);
 
         switch(this.op_type) {
 
@@ -83,6 +86,8 @@ public class Binop implements Node {
 
             case I_NE:
 
+                PrintCode.print_binop("xor", dest, t1, t2);
+                PrintCode.print_binop("slt", dest, "$0", dest); 
                 break;
         }
 

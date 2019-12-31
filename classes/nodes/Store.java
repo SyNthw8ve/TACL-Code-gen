@@ -26,6 +26,7 @@ public class Store implements Node{
     @Override
     public void emit(SymbolTable s, Head h) {
         
+        RegisterAlloc.check_spilled(this.t_target);
         RegisterAlloc.temp_use(1);
 
         String tt = RegisterAlloc.get_alloc(this.t_target);

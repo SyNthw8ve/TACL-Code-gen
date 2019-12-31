@@ -21,7 +21,8 @@ public class Return implements Node {
     public void emit(SymbolTable s, Head h) {
         
         if(this.return_temp != null) {
-
+            
+            RegisterAlloc.check_spilled(this.return_temp);
             RegisterAlloc.temp_use(1);
 
             String t_ret = RegisterAlloc.get_alloc(this.return_temp);

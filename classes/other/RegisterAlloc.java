@@ -9,7 +9,7 @@ import classes.nodes.Temp;
  */
 public class RegisterAlloc {
 
-    public static final int K = 9;
+    public static final int K = 10;
 
     public static int n = 0;
     public static int spilled = 0;
@@ -38,7 +38,7 @@ public class RegisterAlloc {
 
     public static void temp_use(int temps) {
         
-        n = n - temps + spilled;
+        n -= temps;
     }
 
     public static int get_temps_used() {
@@ -87,17 +87,29 @@ public class RegisterAlloc {
         }
     }
 
-    public static String get_alloc(Temp t) {
+    public static void check_spilled(Temp t) {
 
         TempRec tt = temps_alloced.get(t.temp);
 
         if(tt.reg_spilled) {
 
-            PrintCode.print_mem("lw", "$t" + tt.ass_register, tt.stack_pos, "$fp");
-            spilled--;
-        }
+            tt.ass_register = n;
+            tt.reg_spilled = false;
 
-        return  "$t" + temps_alloced.get(t.temp).ass_register;
+            temps_alloced.put(t.temp, tt);
+            registers[n].assign_temp(t);
+
+            n++;
+
+            PrintCode.print_mem("lw", "$t" + tt.ass_register, tt.stack_pos, "$fp");
+        }
+    }
+
+    public static String get_alloc(Temp t) {
+
+        TempRec tt = temps_alloced.get(t.temp);
+
+        return  "$t" + tt.ass_register;
     }
 
     public static RegisterRec register_to_spill() {

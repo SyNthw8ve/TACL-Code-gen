@@ -25,6 +25,8 @@ public class Unop implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
+        RegisterAlloc.check_spilled(this.t_op);
+
         RegisterAlloc.temp_use(1);
         RegisterAlloc.new_alloc(this.t_store);
 

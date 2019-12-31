@@ -25,6 +25,11 @@ public class Fcall implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
+        for(int i = 0; i < this.arg_list.size(); i++) {
+
+           RegisterAlloc.check_spilled(this.arg_list.get(i));
+        }
+
         RegisterAlloc.temp_use(this.arg_list.size());
 
         int in_use = RegisterAlloc.get_temps_used();

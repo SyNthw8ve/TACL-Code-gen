@@ -23,6 +23,8 @@ public class Print implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
+        RegisterAlloc.check_spilled(this.to_print);
+
         RegisterAlloc.temp_use(1);
         String t_name = RegisterAlloc.get_alloc(this.to_print);
 
