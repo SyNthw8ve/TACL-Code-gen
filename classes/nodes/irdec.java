@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import classes.other.Block;
+import classes.other.GraphColor;
 import classes.other.Info;
 import classes.other.InterferenceGraph;
 import classes.other.PrintCode;
@@ -397,6 +398,10 @@ public class IRDec {
         this.live_range();
 
         InterferenceGraph IG = new InterferenceGraph(temp_range);
+
+        GraphColor graph_color = new GraphColor(IG);
+
+        graph_color.color_graph();
 
         int num_temps = this.get_temp_num();
 

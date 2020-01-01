@@ -57,7 +57,7 @@ public class InterferenceGraph {
             }
         }
 
-        for(HashMap.Entry<String, GraphNode> entry : nodes.entrySet()) {
+        /* for(HashMap.Entry<String, GraphNode> entry : nodes.entrySet()) {
 
             String key = entry.getKey();
             GraphNode value = entry.getValue();
@@ -70,7 +70,7 @@ public class InterferenceGraph {
             }
 
             System.out.println();
-        }
+        } */
     }
 
     public void add_edge(String t1, String t2) {
@@ -80,5 +80,31 @@ public class InterferenceGraph {
 
         t1g.interference.add(t2g);
         t2g.interference.add(t1g);
+
+        t1g.degree++;
+        t2g.degree++;
     }
+
+    public GraphNode remove_node(String t) {
+
+        GraphNode node = this.nodes.remove(t);
+
+        for(GraphNode n : node.interference) {
+
+            n.degree--;
+        }
+
+        return node;
+    }
+
+    public void add_node(GraphNode g) {
+        
+        this.nodes.put(g.temp, g);
+    }
+
+    public boolean is_empty() {
+
+        return this.nodes.isEmpty();
+    }
+
 }
