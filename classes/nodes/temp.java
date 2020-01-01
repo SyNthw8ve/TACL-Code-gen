@@ -23,7 +23,7 @@ public class Temp implements Comparable {
         
         Temp tc = (Temp) arg0;
 
-        if (tc.temp.compareTo(this.temp) == 0 && tc.start == this.start && tc.end == this.end) {
+        if (tc.temp.compareTo(this.temp) == 0) {
 
             return 0;
         }

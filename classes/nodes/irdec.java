@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import classes.other.Block;
 import classes.other.Info;
+import classes.other.InterferenceGraph;
 import classes.other.PrintCode;
 import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
@@ -372,13 +373,13 @@ public class IRDec {
             i++;
         }
 
-        for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) {
+        /* for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) {
             String key = entry.getKey();
             Temp value = entry.getValue();
         
             System.out.println(key);
             System.out.println(value.start + " -> " + value.end);
-        }
+        } */
     }
 
     public void emit(SymbolTable st) {
@@ -394,6 +395,8 @@ public class IRDec {
         this.global_analysis();
 
         this.live_range();
+
+        InterferenceGraph IG = new InterferenceGraph(temp_range);
 
         int num_temps = this.get_temp_num();
 
