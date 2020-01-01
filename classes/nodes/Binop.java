@@ -124,5 +124,28 @@ public class Binop implements Node {
         
         return var_kill;
     }
+
+    @Override
+    public void change_ue_var(String t, Temp n_temp) {
+        
+        if(this.t_t1.temp.compareTo(t) == 0) {
+
+            this.t_t1 = n_temp;
+        }
+
+        if(this.t_t2.temp.compareTo(t) == 0) {
+
+            this.t_t2 = n_temp;
+        }
+
+    }
+
+    @Override
+    public void change_var_kill(String t, Temp n_temp) {
+        
+        this.t_target = n_temp;
+    }
+
+    
     
 }

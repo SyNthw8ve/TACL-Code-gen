@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import classes.other.Block;
 import classes.other.GraphColor;
+import classes.other.GraphNode;
 import classes.other.Info;
 import classes.other.InterferenceGraph;
 import classes.other.PrintCode;
@@ -104,65 +105,15 @@ public class IRDec {
 
         Block last_block = this.basic_blocks.getLast();
         last_block.close(this.body.size());
-    }
-
-    public void compute_flow_graph() {
-
-        for(Block b : basic_blocks) {
-
-            Statement final_block_statement = this.body.get(b.end - 1);
-
-            if (final_block_statement.expr instanceof Jump) {
-
-                Jump j = (Jump) final_block_statement.expr;
-
-                String label = j.label.label;
-                
-                Block block = this.basic_blocks.get(label_block.get(label));
-                b.successors.add(block);
-            }
-
-            else if (final_block_statement.expr instanceof Cjump) {
-
-                Cjump cj = (Cjump) final_block_statement.expr;
-
-                String label_t = cj.l_true.label;
-                String label_f = cj.l_false.label;
-               
-                int block_id_t = label_block.get(label_t).intValue();
-                int block_id_f = label_block.get(label_f).intValue();
-
-                Block block_t = this.basic_blocks.get(block_id_t);
-                Block block_f = this.basic_blocks.get(block_id_f);
-                
-                b.successors.add(block_t);
-                b.successors.add(block_f);
-            }
-
-            else {
-
-                if (b.id < this.basic_blocks.size() - 1) {
-
-                    Block next_block = this.basic_blocks.get(b.id + 1);
-
-                    b.successors.add(next_block);
-                }
-            }
-        }
 
         /* for(Block b : basic_blocks) {
 
             System.out.println(b.id);
 
-            for(Block s : b.successors) {
-
-                System.out.print(" " + s.id + 1);
-            }
-
-            System.out.println();
+            System.out.println("start " + b.start + " " + b.end);
         } */
     }
-
+    
     public void live_analysis() {
 
         for(Block b : basic_blocks) {
@@ -219,97 +170,6 @@ public class IRDec {
                System.out.println("LI " + s.live_in.toString());
             }
         } */
-    }
-
-    public void block_analysis() {
-
-        for(Block b : basic_blocks) {
-
-            Statement s = this.body.get(b.start - 1);
-
-            b.ue_var = new HashSet<>(s.live_in);
-
-            HashSet<String> var_kill =  new HashSet<>();
-
-            for(int i = b.start - 1; i < b.end; i++) {
-
-                s = this.body.get(i);
-
-                HashSet<String> s_var_kill = s.var_kill;
-
-                var_kill.addAll(s_var_kill);
-            }
-
-            b.var_kill = new HashSet<>(var_kill);
-
-            /* System.out.println(b.id);
-
-            System.out.print("UE " + b.ue_var.toString() + " ");
-            System.out.println("VAR " + b.var_kill.toString() + " "); */
-               
-        }
-
-    }
-
-    public void global_analysis() {
-
-        boolean repeat = false;
-
-        do {
-
-            repeat = false;
-            
-            for(Block b : basic_blocks) {
-
-                HashSet<String> lo = new HashSet<>(b.live_out_prime);
-
-                b.live_out = lo;
-            }
-
-            for(Block b : basic_blocks) {
-
-                HashSet<String> lo = new HashSet<>();
-
-                for(Block succ : b.successors) {
-
-                    HashSet<String> s_lo = new HashSet<>(succ.live_out);
-                    HashSet<String> s_ue_var = new HashSet<>(succ.ue_var);
-                    HashSet<String> s_var_kill = new HashSet<>(succ.var_kill);
-
-                    s_lo.removeAll(s_var_kill);
-                    s_ue_var.addAll(s_lo);
-
-                    lo.addAll(s_ue_var);
-                }
-
-                b.live_out_prime = new HashSet<>(lo);
-
-                if (!b.live_out.equals(b.live_out_prime)) repeat = true;
-            }
-
-        } while (repeat);
-
-        for(Block b : basic_blocks) {
-
-            HashSet<String> lo = new HashSet<>(b.live_out);
-            HashSet<String> ue_var = new HashSet<>(b.ue_var);
-            HashSet<String> var_kill = new HashSet<>(b.var_kill);
-
-            lo.removeAll(var_kill);
-            ue_var.addAll(lo);
-
-            b.live_in = new HashSet<>(ue_var);
-        }
-
-        /* for(Block b : basic_blocks) {
-
-            System.out.println(b.id);
-               
-            System.out.print("UE " + b.ue_var.toString() + " ");
-            System.out.print("VAR " + b.var_kill.toString() + " ");
-            System.out.print("LO " + b.live_out.toString() + " ");
-            System.out.println("LI " + b.live_in.toString());
-        } */ 
     }
 
     public void live_range() {
@@ -383,29 +243,93 @@ public class IRDec {
         } */
     }
 
+    public int re_shape(LinkedList<GraphNode> spilled) {
+
+        for(GraphNode spill : spilled) {
+
+            LinkedList<Statement> new_body = new LinkedList<>();
+
+            int id = 1;
+
+            for(int i = 0; i < this.body.size(); i++) {
+
+                Statement s = this.body.get(i);
+
+                HashSet<String> ue_vars = s.ue_var;
+                HashSet<String> var_kill = s.var_kill;
+
+                if (ue_vars.contains(spill.temp)) {
+
+                    String new_name = spill.temp + "_" + id;
+                    id++;
+
+                    Temp t = new Temp(new_name);
+
+                    Load l = new Load(Load.Type.LOCAL, "@s", t);
+                    s.expr.change_ue_var(spill.temp, t);
+
+                    //TODO: change temps of statement node
+
+                   new_body.add(new Statement(new LinkedList<>(), l));
+                }
+
+                new_body.add(s);
+
+                if (var_kill.contains(spill.temp)) {
+
+                    String new_name = spill.temp + "_" + id;
+                    id++;
+                    
+                    Temp t = new Temp(new_name);
+
+                    //TODO: change temps of statement node
+                    s.expr.change_var_kill(spill.temp, t);
+
+                    Store st = new Store(Store.Type.LOCAL, "@s", t);
+
+                    new_body.add(new Statement(new LinkedList<>(), st));
+                }
+
+                s.re_compute();
+            }
+
+            this.body = new_body;
+        }
+
+        return spilled.size();
+    }
+
     public void emit(SymbolTable st) {
 
-        this.compute_basic_blocks();
+        LinkedList<GraphNode> to_spill = new LinkedList<>();
 
-        this.compute_flow_graph();
+        int temps = 0;
 
-        this.live_analysis();
+        do {
 
-        this.block_analysis();
+            this.basic_blocks = new LinkedList<>();
+            this.label_block = new HashMap<>();
+            this.temp_range = new HashMap<>();
 
-        this.global_analysis();
+            this.compute_basic_blocks();
 
-        this.live_range();
+            this.live_analysis();
 
-        InterferenceGraph IG = new InterferenceGraph(temp_range);
+            this.live_range();
 
-        GraphColor graph_color = new GraphColor(IG);
+            InterferenceGraph IG = new InterferenceGraph(temp_range);
 
-        graph_color.color_graph();
+            GraphColor graph_color = new GraphColor(IG);
 
-        int num_temps = this.get_temp_num();
+            to_spill = graph_color.color_graph();
 
-        //this.head.emit(st, this.head);
+            if (!to_spill.isEmpty()) temps = this.re_shape(to_spill);
+
+        } while(!to_spill.isEmpty());
+
+        int num_temps = temps * -4;
+
+        this.head.emit(st, this.head);
 
         Info i = st.get(this.head.id);
 
@@ -415,15 +339,15 @@ public class IRDec {
         RegisterAlloc.reset();
         RegisterAlloc.stack_pos = num_locals - 4;
         
-       /*  this.prologue(num_locals, num_temps);
+        this.prologue(num_locals, num_temps);
 
-        for(Statement s : this.body) {
+       /* for(Statement s : this.body) {
 
             s.emit(st, this.head);
-        }
+        }*/
 
         this.epilogue(num_args, this.head.get_id());
         
-        System.out.println(); */
+        System.out.println();
     }
 }

@@ -109,4 +109,20 @@ public class Fcall implements Node {
 
         return var_kill;
     }
+
+    @Override
+    public void change_ue_var(String t, Temp n_temp) {
+        
+        for(Temp tt : this.arg_list) {
+
+            if(tt.temp.compareTo(t) == 0) tt = n_temp;
+        }
+
+    }
+
+    @Override
+    public void change_var_kill(String t, Temp n_temp) {
+       
+        this.target_temp = n_temp;
+    }
 }

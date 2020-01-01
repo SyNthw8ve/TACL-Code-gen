@@ -14,4 +14,7 @@ public interface Node {
 
     public HashSet<String> get_ue_var();
     public HashSet<String> get_var_kill();
+
+    public void change_ue_var(String t, Temp n_temp);
+    public void change_var_kill(String t, Temp n_temp);
 }

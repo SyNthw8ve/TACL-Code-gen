@@ -71,4 +71,16 @@ public class Print implements Node {
         
         return var_kill;
     }
+
+    @Override
+    public void change_ue_var(String t, Temp n_temp) {
+        
+        this.to_print = n_temp;
+    }
+
+    @Override
+    public void change_var_kill(String t, Temp n_temp) {
+        // TODO Auto-generated method stub
+
+    }
 }

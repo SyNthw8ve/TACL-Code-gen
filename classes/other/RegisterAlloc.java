@@ -9,7 +9,7 @@ import classes.nodes.Temp;
  */
 public class RegisterAlloc {
 
-    public static final int K = 10;
+    public static final int K = 3;
 
     public static int n = 0;
     public static int spilled = 0;

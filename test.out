@@ -2,20 +2,22 @@
 	.include "tacl-io.asm"
 
 	.text
-t4 2
-
-t5 0
-
-t0 1
-
-t1 0
-
-t2 1
-
-t3 0
+factorial:-4	sw      $fp, -4($sp)
+	addiu   $fp, $sp, -4   
+	sw      $ra, -4($fp)
+	addiu   $sp, $fp, -12  
+	lw      $ra, -4($fp)
+	addiu   $sp, $fp, 8    
+	lw      $fp, 0($fp)
+	jr      $ra
 
 	.text
-t0 0
-
-t1 0
+	.globl main
+main:0	sw      $fp, -4($sp)
+	addiu   $fp, $sp, -4   
+	sw      $ra, -4($fp)
+	addiu   $sp, $fp, -4   
+	lw      $ra, -4($fp)
+	addiu   $sp, $fp, 4    
+	lw      $fp, 0($fp)
 

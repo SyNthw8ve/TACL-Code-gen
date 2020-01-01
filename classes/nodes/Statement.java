@@ -57,4 +57,10 @@ public class Statement {
 
         return this.expr instanceof Cjump || this.expr instanceof Jump || this.expr instanceof Return;
     }
+
+    public void re_compute() {
+
+        this.ue_var = expr.get_ue_var();
+        this.var_kill = expr.get_var_kill();
+    }
 }
