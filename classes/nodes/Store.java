@@ -85,7 +85,7 @@ public class Store implements Node{
 
         HashSet<String> var_kill = new HashSet<>();
         
-        var_kill.add(this.id);
+        //var_kill.add(this.id);
 
         return var_kill;
     }

@@ -312,7 +312,73 @@ public class IRDec {
 
     public void live_range() {
 
+        int i = 0;
 
+        for(Statement s : this.body) {
+
+            HashSet<String> lo = new HashSet<>(s.live_out);
+            HashSet<String> li = new HashSet<>(s.live_in);
+            HashSet<String> vk = new HashSet<>(s.var_kill);
+
+            lo.removeAll(li);
+            lo.addAll(vk);
+
+            HashSet<String> new_vars = new HashSet<>(lo);
+
+            lo = new HashSet<>(s.live_out);
+            li = new HashSet<>(s.live_in);
+
+            li.removeAll(lo);
+
+            HashSet<String> dead_vars = new HashSet<>(li);
+
+            for(String v : new_vars) {
+
+                if(!temp_range.containsKey(v)) {
+                   
+                    Temp t = new Temp(v);
+                    t.start = i + 1;
+
+                    if(s.expr instanceof Unop) {
+
+                        Unop e = (Unop) s.expr;
+
+                        if (e.op_type == Unop.Type.I_COPY) {
+
+                            t.is_copy = true;
+                            t.copy = e.t_op;
+                        }
+                    }
+
+                    temp_range.put(v, t);
+                }
+
+                else {
+
+                    Temp t = temp_range.get(v);
+
+                    if (t.start > i + 1 || t.start == 0) t.start = i + 1;
+                }
+            }
+
+            for(String v : dead_vars) {
+
+                Temp t = temp_range.get(v);
+
+                if (t.end < i + 1 || t.end == 0) t.end = i + 1;
+                
+            }
+
+            i++;
+        }
+
+        for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) {
+            String key = entry.getKey();
+            Temp value = entry.getValue();
+        
+            System.out.println(key);
+            System.out.println(value.start + " -> " + value.end);
+        }
     }
 
     public void emit(SymbolTable st) {
@@ -326,6 +392,8 @@ public class IRDec {
         this.block_analysis();
 
         this.global_analysis();
+
+        this.live_range();
 
         int num_temps = this.get_temp_num();
 
