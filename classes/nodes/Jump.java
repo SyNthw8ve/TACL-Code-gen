@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import java.util.HashSet;
+
 import classes.other.PrintCode;
 import classes.other.SymbolTable;
 
@@ -26,5 +28,21 @@ public class Jump implements Node {
     public void pre_process() {
         
 
+    }
+
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        return var_kill;
     }
 }

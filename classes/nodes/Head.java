@@ -5,7 +5,7 @@ import classes.other.SymbolTable;
 /**
  * Head
  */
-public class Head implements Node {
+public class Head {
 
     public String id;
 
@@ -14,7 +14,6 @@ public class Head implements Node {
         this.id = name;
     }
 
-    @Override
     public void emit(SymbolTable s, Head h) {
         
         String name = this.id.split("@")[1];
@@ -32,9 +31,4 @@ public class Head implements Node {
         return this.id.split("@")[1];
     }
 
-    @Override
-    public void pre_process() {
-        // TODO Auto-generated method stub
-
-    }
 }

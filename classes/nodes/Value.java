@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import java.util.HashSet;
+
 import classes.other.PrintCode;
 import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
@@ -49,4 +51,21 @@ public class Value implements Node {
         RegisterAlloc.new_alloc();
     }
 
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        var_kill.add(this.target.temp);
+
+        return var_kill;
+    }
 }

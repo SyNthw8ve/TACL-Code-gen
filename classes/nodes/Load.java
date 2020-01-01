@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import java.util.HashSet;
+
 import classes.other.Info;
 import classes.other.PrintCode;
 import classes.other.RegisterAlloc;
@@ -65,5 +67,25 @@ public class Load implements Node {
         
         RegisterAlloc.new_alloc();
 
+    }
+
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        ue_var.add(this.id);
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        var_kill.add(this.t_target.temp);
+
+        return var_kill;
     }
 }

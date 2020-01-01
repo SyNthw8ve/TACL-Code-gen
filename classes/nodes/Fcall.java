@@ -1,5 +1,6 @@
 package classes.nodes;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import classes.other.PrintCode;
@@ -80,5 +81,32 @@ public class Fcall implements Node {
             RegisterAlloc.new_alloc();
         }
 
+    }
+
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        for(Temp t : this.arg_list) {
+
+            ue_var.add(t.temp);
+        }
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        if (this.target_temp != null) {
+
+            var_kill.add(this.target_temp.temp);
+
+        }
+
+        return var_kill;
     }
 }

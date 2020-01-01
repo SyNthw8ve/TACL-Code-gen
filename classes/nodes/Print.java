@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import java.util.HashSet;
+
 import classes.other.PrintCode;
 import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
@@ -50,5 +52,23 @@ public class Print implements Node {
     public void pre_process() {
         
         RegisterAlloc.temp_used_pro(1);
+    }
+
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        ue_var.add(this.to_print.temp);
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        return var_kill;
     }
 }

@@ -2,21 +2,23 @@
 (id @main fun void [] [])
 
 function @factorial
-	t0 <- i_value 1
-	@r <- i_lstore t0
-	t1 <- i_aload @n
+	t0 <- i_aload @n
+	t1 <- i_value 1
 	t2 <- i_value 0
-	t3 <- i_lt t2, t1
-	cjump t3, l0, l1
-l0:	t4 <- i_aload @n
-	t5 <- i_aload @n
-	t6 <- i_value 1
-	t7 <- i_sub t5, t6
-	t8 <- i_call @factorial, [t7]
-	t9 <- i_mul t4, t8
-	@r <- i_lstore t9
-l1:	t10 <- i_lload @r
-	i_return t10
+	t2 <- i_lt t0, t2
+	cjump t2, l1, l0
+	l0: t3 <- i_value 1
+	l3: t4 <- i_copy t0
+	t5 <- i_value 0
+	t6 <- i_lt t5, t4
+	cjump t6, l4, l5
+	l4: t3 <- i_mul t3, t0
+	t0 <- i_sub t0, t1
+	jump l3
+	l5: jump l2
+	l1: t3 <- i_value 1
+	t3 <- i_inv t3
+	l2: i_return t3
 
 function @main
 	t0 <- i_value 3

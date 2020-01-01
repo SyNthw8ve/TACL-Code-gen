@@ -93,6 +93,8 @@ public class RegisterAlloc {
 
         if(tt.reg_spilled) {
 
+            registers[tt.ass_register].spilled = false;
+
             tt.ass_register = n;
             tt.reg_spilled = false;
 
@@ -100,6 +102,7 @@ public class RegisterAlloc {
             registers[n].assign_temp(t);
 
             n++;
+            spilled--;
 
             PrintCode.print_mem("lw", "$t" + tt.ass_register, tt.stack_pos, "$fp");
         }

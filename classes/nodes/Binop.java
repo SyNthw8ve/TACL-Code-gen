@@ -1,5 +1,7 @@
 package classes.nodes;
 
+import java.util.HashSet;
+
 import classes.other.PrintCode;
 import classes.other.RegisterAlloc;
 import classes.other.SymbolTable;
@@ -100,6 +102,27 @@ public class Binop implements Node {
         RegisterAlloc.temp_used_pro(2);
         RegisterAlloc.new_alloc();
 
+    }
+
+    @Override
+    public HashSet<String> get_ue_var() {
+
+        HashSet<String> ue_var = new HashSet<>();
+
+        ue_var.add(this.t_t1.temp);
+        ue_var.add(this.t_t2.temp);
+
+        return ue_var;
+    }
+
+    @Override
+    public HashSet<String> get_var_kill() {
+
+        HashSet<String> var_kill = new HashSet<>();
+        
+        var_kill.add(this.t_target.temp);
+        
+        return var_kill;
     }
     
 }
