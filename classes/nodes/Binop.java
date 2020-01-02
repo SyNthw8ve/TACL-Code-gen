@@ -29,9 +29,9 @@ public class Binop implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        String t1 = RegisterAlloc.get_alloc(this.t_t1);
-        String t2 = RegisterAlloc.get_alloc(this.t_t2);
-        String dest = RegisterAlloc.get_alloc(this.t_target);
+        String t1 = RegisterAlloc.get_alloc(this.t_t1.temp);
+        String t2 = RegisterAlloc.get_alloc(this.t_t2.temp);
+        String dest = RegisterAlloc.get_alloc(this.t_target.temp);
 
         switch(this.op_type) {
 

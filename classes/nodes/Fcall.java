@@ -26,16 +26,9 @@ public class Fcall implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-
-        /* for(int i = 0; i < in_use; i++) {
-
-            PrintCode.print_binop("addiu", "$sp", "$sp", -4);
-            PrintCode.print_mem("sw", "$t" + i, 0, "$sp");
-        } */
-
         for(int i = this.arg_list.size() - 1; i >= 0; i--) {
 
-            String temp = RegisterAlloc.get_alloc(this.arg_list.get(i));
+            String temp = RegisterAlloc.get_alloc(this.arg_list.get(i).temp);
 
             PrintCode.print_binop("addiu", "$sp", "$sp", -4);
             PrintCode.print_mem("sw", temp, 0, "$sp");
@@ -47,15 +40,9 @@ public class Fcall implements Node {
         
         if (this.target_temp != null) {
 
-            String ret_t = RegisterAlloc.get_alloc(this.target_temp);
+            String ret_t = RegisterAlloc.get_alloc(this.target_temp.temp);
             PrintCode.print_binop("or", ret_t, "$0", "$v0");
         }
-
-        /* for(int i = in_use - 1; i >= 0; i--) {
-
-            PrintCode.print_mem("lw", "$t" + i, 0, "$sp");
-            PrintCode.print_binop("addiu", "$sp", "$sp", 4);
-        } */
     }
 
     @Override

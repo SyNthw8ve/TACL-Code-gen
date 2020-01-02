@@ -28,7 +28,7 @@ public class Store implements Node{
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        String tt = RegisterAlloc.get_alloc(this.t_target);
+        String tt = RegisterAlloc.get_alloc(this.t_target.temp);
         Info i = s.get(h.id);
         int index;
 

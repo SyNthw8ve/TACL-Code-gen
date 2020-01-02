@@ -25,7 +25,7 @@ public class Read implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        String t_name = RegisterAlloc.get_alloc(this.store_temp);
+        String t_name = RegisterAlloc.get_alloc(this.store_temp.temp);
 
         switch(this.read_type) {
 

@@ -3,6 +3,7 @@ package classes.nodes;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Stack;
 
 import classes.other.Block;
 import classes.other.GraphColor;
@@ -335,10 +336,44 @@ public class IRDec {
 
         this.prologue(num_locals, num_temps);
 
-       for(Statement s : this.body) {
+        for(Statement s : this.body) {
 
-            s.emit(st, this.head);
-        }
+                if (s.expr instanceof Fcall) {
+
+                    HashSet<String> li = new HashSet<>(s.live_in);
+                    HashSet<String> uv = new HashSet<>(s.ue_var);
+
+                    li.removeAll(uv);
+
+                    Stack<String> saved = new Stack<>();
+
+                    for(String var : li) {
+
+                        String tt = RegisterAlloc.get_alloc(var);
+                        saved.push(tt);
+
+                        PrintCode.print_binop("addiu", "$sp", "$sp", -4);
+                        PrintCode.print_mem("sw", tt, 0, "$sp");
+                    }
+
+                    s.emit(st, this.head);
+
+                    while(!saved.empty()) {
+
+                        String tt = saved.pop();
+
+                        PrintCode.print_mem("lw", tt, 0, "$sp");
+                        PrintCode.print_binop("addiu", "$sp", "$sp", 4);
+                    }
+
+                }
+
+                else {
+
+                    s.emit(st, this.head);
+                }
+
+            }
 
         this.epilogue(num_args, this.head.get_id());
         

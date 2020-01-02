@@ -25,7 +25,7 @@ public class Print implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        String t_name = RegisterAlloc.get_alloc(this.to_print);
+        String t_name = RegisterAlloc.get_alloc(this.to_print.temp);
 
         switch(this.print_type) {
 

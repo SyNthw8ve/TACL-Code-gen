@@ -24,7 +24,7 @@ public class Return implements Node {
         
         if(this.return_temp != null) {
             
-            String t_ret = RegisterAlloc.get_alloc(this.return_temp);
+            String t_ret = RegisterAlloc.get_alloc(this.return_temp.temp);
             PrintCode.print_binop("or", "$v0", "$0", t_ret);
         }
 

@@ -26,7 +26,7 @@ public class Cjump implements Node {
     public void emit(SymbolTable s, Head h) {
         
 
-        String tt = RegisterAlloc.get_alloc(this.t_cond);
+        String tt = RegisterAlloc.get_alloc(this.t_cond.temp);
         String lt = l_true.emit();
         String lf = l_false.emit();
 

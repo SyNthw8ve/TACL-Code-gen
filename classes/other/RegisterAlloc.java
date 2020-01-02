@@ -17,9 +17,9 @@ public class RegisterAlloc {
     }
 
 
-    public static String get_alloc(Temp t) {
+    public static String get_alloc(String t) {
 
-        int tt = alloced.get(t.temp).color;
+        int tt = alloced.get(t).color;
 
         return  "$t" + tt;
     }

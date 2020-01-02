@@ -23,7 +23,7 @@ public class Value implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        String temp = RegisterAlloc.get_alloc(this.target);
+        String temp = RegisterAlloc.get_alloc(this.target.temp);
 
         int val = this.value.intValue();
 
