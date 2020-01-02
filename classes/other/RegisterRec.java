@@ -9,7 +9,7 @@ public class RegisterRec {
 
     Temp current_temp;
     public int number;
-    boolean spilled = false;
+    public boolean spilled = false;
     boolean available = false;
 
     public RegisterRec(int id) {

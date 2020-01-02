@@ -93,6 +93,8 @@ public class RegisterAlloc {
 
         if(tt.reg_spilled) {
 
+            registers[tt.ass_register].spilled = false;
+
             tt.ass_register = n;
             tt.reg_spilled = false;
 
