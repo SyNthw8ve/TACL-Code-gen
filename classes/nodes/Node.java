@@ -10,7 +10,6 @@ import classes.other.SymbolTable;
 public interface Node {
 
     public void emit(SymbolTable s, Head h);
-    public void pre_process();
 
     public HashSet<String> get_ue_var();
     public HashSet<String> get_var_kill();

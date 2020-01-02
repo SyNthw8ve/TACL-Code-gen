@@ -28,8 +28,6 @@ public class Load implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
 
-        RegisterAlloc.new_alloc(this.t_target);
-
         String tt = RegisterAlloc.get_alloc(this.t_target);
         Info i = s.get(h.id);
         int index;
@@ -45,7 +43,12 @@ public class Load implements Node {
 
             case LOCAL:
 
-                index = i.get_local_pos(this.id);
+                if (this.id.startsWith("_")) {
+
+                    index = i.get_temp_pos(this.id);
+                }
+
+                else index = i.get_local_pos(this.id);
 
                 PrintCode.print_mem("lw", tt, index, "$fp");
                 break;
@@ -62,12 +65,6 @@ public class Load implements Node {
         }
     }
 
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.new_alloc();
-
-    }
 
     @Override
     public HashSet<String> get_ue_var() {

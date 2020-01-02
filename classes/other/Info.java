@@ -1,5 +1,6 @@
 package classes.other;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import classes.nodes.Type;
 
@@ -14,6 +15,7 @@ public class Info {
     Type val_type;
     LinkedList<Pair> args;
     LinkedList<Pair> locals;
+    public HashMap<String, Integer> temps;
     Integer val;
 
     public Info(Types kind, LinkedList<Pair> args, LinkedList<Pair> locals, Integer init, Type t) {
@@ -23,6 +25,7 @@ public class Info {
         this.locals = locals;
         this.val = init;
         this.val_type = t;
+        this.temps = new HashMap<>();
     }
 
     public void emit(String name) {
@@ -88,5 +91,20 @@ public class Info {
     public int get_args_num() {
 
         return (1 + this.args.size())*4;
+    }
+
+    public int get_temp_pos(String key) {
+
+        return this.temps.get(key);
+    }
+
+    public void attribute_pos(int pos, int temps) {
+
+        for(String k : this.temps.keySet()) {
+
+            pos -= 4;
+
+            this.temps.put(k, pos);
+        }
     }
 }

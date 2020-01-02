@@ -24,11 +24,6 @@ public class Jump implements Node {
         PrintCode.print_jump("j", l);
     }
 
-    @Override
-    public void pre_process() {
-        
-
-    }
 
     @Override
     public HashSet<String> get_ue_var() {

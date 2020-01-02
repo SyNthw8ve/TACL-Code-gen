@@ -26,25 +26,12 @@ public class Fcall implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        for(int i = 0; i < this.arg_list.size(); i++) {
 
-           RegisterAlloc.check_spilled(this.arg_list.get(i));
-        }
-
-        RegisterAlloc.temp_use(this.arg_list.size());
-
-        int in_use = RegisterAlloc.get_temps_used();
-
-        for(int i = 0; i < in_use; i++) {
+        /* for(int i = 0; i < in_use; i++) {
 
             PrintCode.print_binop("addiu", "$sp", "$sp", -4);
             PrintCode.print_mem("sw", "$t" + i, 0, "$sp");
-        }
-
-        if (this.target_temp != null) {
-
-            RegisterAlloc.new_alloc(this.target_temp);
-        }
+        } */
 
         for(int i = this.arg_list.size() - 1; i >= 0; i--) {
 
@@ -64,23 +51,11 @@ public class Fcall implements Node {
             PrintCode.print_binop("or", ret_t, "$0", "$v0");
         }
 
-        for(int i = in_use - 1; i >= 0; i--) {
+        /* for(int i = in_use - 1; i >= 0; i--) {
 
             PrintCode.print_mem("lw", "$t" + i, 0, "$sp");
             PrintCode.print_binop("addiu", "$sp", "$sp", 4);
-        }
-    }
-
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.temp_used_pro(this.arg_list.size());
-
-        if (this.target_temp != null) {
-
-            RegisterAlloc.new_alloc();
-        }
-
+        } */
     }
 
     @Override

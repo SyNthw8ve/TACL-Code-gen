@@ -2,10 +2,39 @@
 	.include "tacl-io.asm"
 
 	.text
-factorial:-4	sw      $fp, -4($sp)
+factorial:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
-	addiu   $sp, $fp, -12  
+	addiu   $sp, $fp, -16  
+	lw      $t1, 4($fp)
+	ori     $t0, $0, 1    
+	sw      $t0, -12($fp)
+	ori     $t0, $0, 0    
+	slt     $t0, $t1, $t0
+	bne     $t0, $0, l$1
+	j       l$0
+l$0:	ori     $t0, $0, 1    
+	sw      $t0, -16($fp)
+l$3:	or      $t1, $t1, $0
+	ori     $t0, $0, 0    
+	slt     $t0, $t0, $t1
+	bne     $t0, $0, l$4
+	j       l$5
+	lw      $t0, -16($fp)
+l$4:	mult    $t0, $t1
+	mflo    $t0
+	sw      $t0, -16($fp)
+	lw      $t0, -12($fp)
+	subu    $t1, $t1, $t0
+	j       l$3
+l$5:	j       l$2
+l$1:	ori     $t0, $0, 1    
+	sw      $t0, -16($fp)
+	lw      $t0, -16($fp)
+	or      $t0, $0, $t0
+	sw      $t0, -16($fp)
+	lw      $t0, -16($fp)
+l$2:	or      $v0, $0, $t0
 	lw      $ra, -4($fp)
 	addiu   $sp, $fp, 8    
 	lw      $fp, 0($fp)
@@ -13,10 +42,16 @@ factorial:-4	sw      $fp, -4($sp)
 
 	.text
 	.globl main
-main:0	sw      $fp, -4($sp)
+main:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
 	addiu   $sp, $fp, -4   
+	ori     $t0, $0, 3    
+	addiu   $sp, $sp, -4   
+	sw      $t0, 0($sp)
+	jal     factorial
+	or      $t0, $0, $v0
+	i_print$ $t0
 	lw      $ra, -4($fp)
 	addiu   $sp, $fp, 4    
 	lw      $fp, 0($fp)

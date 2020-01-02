@@ -42,11 +42,6 @@ public class Statement {
         expr.emit(s, h);
     }
 
-    
-    public void pre_process() {
-        
-        expr.pre_process();
-    }
 
     public boolean has_label() {
 

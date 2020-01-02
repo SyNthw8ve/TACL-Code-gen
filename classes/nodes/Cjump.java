@@ -25,9 +25,6 @@ public class Cjump implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        RegisterAlloc.check_spilled(this.t_cond);
-
-        RegisterAlloc.temp_use(1);
 
         String tt = RegisterAlloc.get_alloc(this.t_cond);
         String lt = l_true.emit();
@@ -36,11 +33,6 @@ public class Cjump implements Node {
         PrintCode.print_cond_jump(tt, "$0", lt, lf);
     }
 
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.temp_used_pro(1);
-    }
 
     @Override
     public HashSet<String> get_ue_var() {

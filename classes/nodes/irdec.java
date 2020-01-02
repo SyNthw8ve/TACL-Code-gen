@@ -53,17 +53,6 @@ public class IRDec {
 
     }
 
-    public int get_temp_num() {
-
-        RegisterAlloc.reset();
-
-        for(Statement s : this.body) {
-
-            s.pre_process();
-        }
-
-        return RegisterAlloc.temp_space();
-    }
 
     public void compute_basic_blocks() {
 
@@ -113,7 +102,7 @@ public class IRDec {
             System.out.println("start " + b.start + " " + b.end);
         } */
     }
-    
+
     public void live_analysis() {
 
         for(Block b : basic_blocks) {
@@ -243,13 +232,14 @@ public class IRDec {
         } */
     }
 
-    public int re_shape(LinkedList<GraphNode> spilled) {
+    public int re_shape(LinkedList<GraphNode> spilled, Info inf) {
 
         for(GraphNode spill : spilled) {
 
             LinkedList<Statement> new_body = new LinkedList<>();
 
             int id = 1;
+            String stack_name = "_" + spill.temp;
 
             for(int i = 0; i < this.body.size(); i++) {
 
@@ -265,7 +255,7 @@ public class IRDec {
 
                     Temp t = new Temp(new_name);
 
-                    Load l = new Load(Load.Type.LOCAL, "@s", t);
+                    Load l = new Load(Load.Type.LOCAL, stack_name, t);
                     s.expr.change_ue_var(spill.temp, t);
 
                     //TODO: change temps of statement node
@@ -285,13 +275,15 @@ public class IRDec {
                     //TODO: change temps of statement node
                     s.expr.change_var_kill(spill.temp, t);
 
-                    Store st = new Store(Store.Type.LOCAL, "@s", t);
+                    Store st = new Store(Store.Type.LOCAL, stack_name, t);
 
                     new_body.add(new Statement(new LinkedList<>(), st));
                 }
 
                 s.re_compute();
             }
+
+            inf.temps.put(stack_name, 0);
 
             this.body = new_body;
         }
@@ -302,8 +294,11 @@ public class IRDec {
     public void emit(SymbolTable st) {
 
         LinkedList<GraphNode> to_spill = new LinkedList<>();
+        GraphColor graph_color;
 
         int temps = 0;
+
+        Info i = st.get(this.head.id);
 
         do {
 
@@ -319,11 +314,11 @@ public class IRDec {
 
             InterferenceGraph IG = new InterferenceGraph(temp_range);
 
-            GraphColor graph_color = new GraphColor(IG);
+            graph_color = new GraphColor(IG);
 
             to_spill = graph_color.color_graph();
 
-            if (!to_spill.isEmpty()) temps = this.re_shape(to_spill);
+            if (!to_spill.isEmpty()) temps += this.re_shape(to_spill, i);
 
         } while(!to_spill.isEmpty());
 
@@ -331,20 +326,19 @@ public class IRDec {
 
         this.head.emit(st, this.head);
 
-        Info i = st.get(this.head.id);
-
         int num_locals = i.get_local_num();
         int num_args = i.get_args_num();
 
-        RegisterAlloc.reset();
-        RegisterAlloc.stack_pos = num_locals - 4;
-        
+        i.attribute_pos(num_locals, temps);
+
+        RegisterAlloc.alloced = graph_color.get_register();
+
         this.prologue(num_locals, num_temps);
 
-       /* for(Statement s : this.body) {
+       for(Statement s : this.body) {
 
             s.emit(st, this.head);
-        }*/
+        }
 
         this.epilogue(num_args, this.head.get_id());
         

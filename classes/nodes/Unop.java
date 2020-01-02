@@ -27,11 +27,6 @@ public class Unop implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        RegisterAlloc.check_spilled(this.t_op);
-
-        RegisterAlloc.temp_use(1);
-        RegisterAlloc.new_alloc(this.t_store);
-
         String tt = RegisterAlloc.get_alloc(this.t_store);
         String t1 = RegisterAlloc.get_alloc(this.t_op);
 
@@ -56,13 +51,6 @@ public class Unop implements Node {
                 break;
         }
 
-    }
-
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.temp_used_pro(1);
-        RegisterAlloc.new_alloc();
     }
 
     @Override

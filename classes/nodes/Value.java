@@ -23,8 +23,6 @@ public class Value implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        RegisterAlloc.new_alloc(this.target);
-
         String temp = RegisterAlloc.get_alloc(this.target);
 
         int val = this.value.intValue();
@@ -43,12 +41,6 @@ public class Value implements Node {
             PrintCode.print_binop("ori", temp, "$0", val);
         }
 
-    }
-
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.new_alloc();
     }
 
     @Override

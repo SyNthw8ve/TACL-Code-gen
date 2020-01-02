@@ -28,9 +28,6 @@ public class Store implements Node{
     @Override
     public void emit(SymbolTable s, Head h) {
         
-        RegisterAlloc.check_spilled(this.t_target);
-        RegisterAlloc.temp_use(1);
-
         String tt = RegisterAlloc.get_alloc(this.t_target);
         Info i = s.get(h.id);
         int index;
@@ -46,7 +43,12 @@ public class Store implements Node{
 
             case LOCAL:
 
-                index = i.get_local_pos(this.id);
+                if (this.id.startsWith("_")) {
+
+                    index = i.get_temp_pos(this.id);
+                }
+
+                else index = i.get_local_pos(this.id);
 
                 PrintCode.print_mem("sw", tt, index, "$fp");
                 break;
@@ -61,13 +63,6 @@ public class Store implements Node{
             default:
                 break;
         }
-    }
-
-    @Override
-    public void pre_process() {
-        
-        RegisterAlloc.temp_used_pro(1);
-
     }
 
     @Override
