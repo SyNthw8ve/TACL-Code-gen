@@ -11,7 +11,7 @@ import java.util.Stack;
  */
 public class GraphColor {
 
-    public final static int K = 2;
+    public final static int K = 3;
     public LinkedList<GraphNode> spill_candidates;
     public InterferenceGraph to_color;
     public Stack<GraphNode> stack;

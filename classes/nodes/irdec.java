@@ -54,7 +54,6 @@ public class IRDec {
 
     }
 
-
     public void compute_basic_blocks() {
 
         int id = 0;
@@ -259,13 +258,12 @@ public class IRDec {
                     Load l = new Load(Load.Type.LOCAL, stack_name, t);
                     s.expr.change_ue_var(spill.temp, t);
 
-                    //TODO: change temps of statement node
-
-                   new_body.add(new Statement(new LinkedList<>(), l));
+                    new_body.add(new Statement(s.labels, l));
+                    s.labels = new LinkedList<>();
                 }
 
                 new_body.add(s);
-
+                
                 if (var_kill.contains(spill.temp)) {
 
                     String new_name = spill.temp + "_" + id;
@@ -273,7 +271,6 @@ public class IRDec {
                     
                     Temp t = new Temp(new_name);
 
-                    //TODO: change temps of statement node
                     s.expr.change_var_kill(spill.temp, t);
 
                     Store st = new Store(Store.Type.LOCAL, stack_name, t);
