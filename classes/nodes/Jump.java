@@ -43,13 +43,13 @@ public class Jump implements Node {
 
     @Override
     public void change_ue_var(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
+        
 
     }
 
     @Override
     public void change_var_kill(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
+        
 
     }
 }

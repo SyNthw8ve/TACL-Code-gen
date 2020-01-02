@@ -71,8 +71,6 @@ public class Load implements Node {
 
         HashSet<String> ue_var = new HashSet<>();
 
-        //ue_var.add(this.id);
-
         return ue_var;
     }
 
@@ -88,8 +86,7 @@ public class Load implements Node {
 
     @Override
     public void change_ue_var(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
-
+        
     }
 
     @Override

@@ -31,7 +31,6 @@ public class Statement {
     }
 
     public void emit(SymbolTable s, Head h) {
-        // TODO Auto-generated method stub
 
         for(Label l : this.labels) {
 

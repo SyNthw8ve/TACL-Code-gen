@@ -11,7 +11,7 @@ import java.util.Stack;
  */
 public class GraphColor {
 
-    public final static int K = 3;
+    public final static int K = 2;
     public LinkedList<GraphNode> spill_candidates;
     public InterferenceGraph to_color;
     public Stack<GraphNode> stack;
@@ -73,7 +73,7 @@ public class GraphColor {
         }
     }
 
-    public boolean select() {
+    public void select() {
 
         while(!stack.empty()) {
 
@@ -83,7 +83,7 @@ public class GraphColor {
 
             if(!colored) {
 
-                return false;
+                return;
             }
 
             else {
@@ -91,8 +91,6 @@ public class GraphColor {
                 this.to_color.add_node(v);
             }
         }
-
-        return true;
     }
 
     public boolean pick_color(GraphNode g) {
@@ -132,7 +130,7 @@ public class GraphColor {
 
         this.simplify();
 
-        boolean built = this.select();
+        this.select();
 
         /* if (built) {
 

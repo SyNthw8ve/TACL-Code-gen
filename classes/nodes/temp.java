@@ -1,6 +1,6 @@
 package classes.nodes;
 
-public class Temp implements Comparable {
+public class Temp implements Comparable<Temp> {
 
     public String temp;
     public int start;
@@ -19,10 +19,8 @@ public class Temp implements Comparable {
     }
 
     @Override
-    public int compareTo(Object arg0) {
+    public int compareTo(Temp tc) {
         
-        Temp tc = (Temp) arg0;
-
         if (tc.temp.compareTo(this.temp) == 0) {
 
             return 0;

@@ -71,7 +71,7 @@ public class Print implements Node {
 
     @Override
     public void change_var_kill(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
+        
 
     }
 }

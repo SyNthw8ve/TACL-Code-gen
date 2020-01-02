@@ -2,8 +2,6 @@ package classes.other;
 
 import java.util.HashMap;
 
-import classes.nodes.Temp;
-
 /**
  * RegisterAlloc
  */
@@ -15,7 +13,6 @@ public class RegisterAlloc {
 
 
     }
-
 
     public static String get_alloc(String t) {
 

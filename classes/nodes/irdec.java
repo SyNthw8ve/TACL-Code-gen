@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Stack;
 
+import classes.other.AllocInfo;
 import classes.other.Block;
 import classes.other.GraphColor;
 import classes.other.GraphNode;
@@ -23,8 +24,6 @@ public class IRDec {
     public LinkedList<Statement> body;
 
     public LinkedList<Block> basic_blocks = new LinkedList<>();
-    public HashMap<String, Integer> label_block = new HashMap<>();
-
     public HashMap<String, Temp> temp_range = new HashMap<>();
 
     public IRDec(Head h, LinkedList<Statement> b) {
@@ -47,7 +46,7 @@ public class IRDec {
         PrintCode.print_binop("addiu", "$sp", "$fp", num_args);
         PrintCode.print_mem("lw", "$fp", 0, "$fp");
 
-        if(head.compareTo("main") != 0) {
+        if (head.compareTo("main") != 0) {
 
             PrintCode.print_jump("jr", "$ra");
         }
@@ -61,7 +60,7 @@ public class IRDec {
         Block first_block = new Block(id, 1);
         this.basic_blocks.add(first_block);
 
-        for(int i = 1; i < this.body.size(); i++) {
+        for (int i = 1; i < this.body.size(); i++) {
 
             Statement s = this.body.get(i);
 
@@ -78,11 +77,6 @@ public class IRDec {
 
                 Block new_block = new Block(id, i + 1);
                 this.basic_blocks.add(new_block);
-
-                for(Label l : s.labels) {
-
-                    label_block.put(l.label, id);
-                }
             }
 
             if (s.is_jump()) {
@@ -95,17 +89,18 @@ public class IRDec {
         Block last_block = this.basic_blocks.getLast();
         last_block.close(this.body.size());
 
-        /* for(Block b : basic_blocks) {
-
-            System.out.println(b.id);
-
-            System.out.println("start " + b.start + " " + b.end);
-        } */
+        /*
+         * for(Block b : basic_blocks) {
+         * 
+         * System.out.println(b.id);
+         * 
+         * System.out.println("start " + b.start + " " + b.end); }
+         */
     }
 
     public void live_analysis() {
 
-        for(Block b : basic_blocks) {
+        for (Block b : basic_blocks) {
 
             Statement last_statement = this.body.get(b.end - 1);
 
@@ -120,7 +115,7 @@ public class IRDec {
 
             last_statement.live_in = ue_var;
 
-            for(int i = b.end - 2; i >= b.start - 1; i--) {
+            for (int i = b.end - 2; i >= b.start - 1; i--) {
 
                 Statement m = this.body.get(i + 1);
                 Statement n = this.body.get(i);
@@ -145,27 +140,27 @@ public class IRDec {
             }
         }
 
-        /* for(Block b : basic_blocks) {
-
-            System.out.println(b.id);
-
-            for(int i = b.start - 1; i < b.end; i++) {
-
-               Statement s = this.body.get(i);
-               
-               System.out.print("UE " + s.ue_var.toString() + " ");
-               System.out.print("VAR " + s.var_kill.toString() + " ");
-               System.out.print("LO " + s.live_out.toString() + " ");
-               System.out.println("LI " + s.live_in.toString());
-            }
-        } */
+        /*
+         * for(Block b : basic_blocks) {
+         * 
+         * System.out.println(b.id);
+         * 
+         * for(int i = b.start - 1; i < b.end; i++) {
+         * 
+         * Statement s = this.body.get(i);
+         * 
+         * System.out.print("UE " + s.ue_var.toString() + " "); System.out.print("VAR "
+         * + s.var_kill.toString() + " "); System.out.print("LO " +
+         * s.live_out.toString() + " "); System.out.println("LI " +
+         * s.live_in.toString()); } }
+         */
     }
 
     public void live_range() {
 
         int i = 0;
 
-        for(Statement s : this.body) {
+        for (Statement s : this.body) {
 
             HashSet<String> lo = new HashSet<>(s.live_out);
             HashSet<String> li = new HashSet<>(s.live_in);
@@ -183,14 +178,14 @@ public class IRDec {
 
             HashSet<String> dead_vars = new HashSet<>(li);
 
-            for(String v : new_vars) {
+            for (String v : new_vars) {
 
-                if(!temp_range.containsKey(v)) {
-                   
+                if (!temp_range.containsKey(v)) {
+
                     Temp t = new Temp(v);
                     t.start = i + 1;
 
-                    if(s.expr instanceof Unop) {
+                    if (s.expr instanceof Unop) {
 
                         Unop e = (Unop) s.expr;
 
@@ -208,40 +203,42 @@ public class IRDec {
 
                     Temp t = temp_range.get(v);
 
-                    if (t.start > i + 1 || t.start == 0) t.start = i + 1;
+                    if (t.start > i + 1 || t.start == 0)
+                        t.start = i + 1;
                 }
             }
 
-            for(String v : dead_vars) {
+            for (String v : dead_vars) {
 
                 Temp t = temp_range.get(v);
 
-                if (t.end < i + 1 || t.end == 0) t.end = i + 1;
-                
+                if (t.end < i + 1 || t.end == 0)
+                    t.end = i + 1;
+
             }
 
             i++;
         }
 
-        /* for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) {
-            String key = entry.getKey();
-            Temp value = entry.getValue();
-        
-            System.out.println(key);
-            System.out.println(value.start + " -> " + value.end);
-        } */
+        /*
+         * for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) { String key =
+         * entry.getKey(); Temp value = entry.getValue();
+         * 
+         * System.out.println(key); System.out.println(value.start + " -> " +
+         * value.end); }
+         */
     }
 
-    public int re_shape(LinkedList<GraphNode> spilled, Info inf) {
+    public void rebuild_IR(LinkedList<GraphNode> spilled, Info inf) {
 
-        for(GraphNode spill : spilled) {
+        for (GraphNode spill : spilled) {
 
             LinkedList<Statement> new_body = new LinkedList<>();
 
             int id = 1;
             String stack_name = "_" + spill.temp;
 
-            for(int i = 0; i < this.body.size(); i++) {
+            for (int i = 0; i < this.body.size(); i++) {
 
                 Statement s = this.body.get(i);
 
@@ -263,12 +260,12 @@ public class IRDec {
                 }
 
                 new_body.add(s);
-                
+
                 if (var_kill.contains(spill.temp)) {
 
                     String new_name = spill.temp + "_" + id;
                     id++;
-                    
+
                     Temp t = new Temp(new_name);
 
                     s.expr.change_var_kill(spill.temp, t);
@@ -285,29 +282,25 @@ public class IRDec {
 
             this.body = new_body;
         }
-
-        return spilled.size();
     }
 
-    public void emit(SymbolTable st) {
-
-        LinkedList<GraphNode> to_spill = new LinkedList<>();
-        GraphColor graph_color;
+    public AllocInfo alloc_registers(SymbolTable st) {
 
         int temps = 0;
+        boolean restart = false;
 
-        Info i = st.get(this.head.id);
+        GraphColor graph_color;
+        LinkedList<GraphNode> to_spill = new LinkedList<>();
+
+        Info inf = st.get(this.head.id);
 
         do {
 
             this.basic_blocks = new LinkedList<>();
-            this.label_block = new HashMap<>();
             this.temp_range = new HashMap<>();
 
             this.compute_basic_blocks();
-
             this.live_analysis();
-
             this.live_range();
 
             InterferenceGraph IG = new InterferenceGraph(temp_range);
@@ -316,64 +309,74 @@ public class IRDec {
 
             to_spill = graph_color.color_graph();
 
-            if (!to_spill.isEmpty()) temps += this.re_shape(to_spill, i);
+            restart = !to_spill.isEmpty();
+            temps += to_spill.size();
 
-        } while(!to_spill.isEmpty());
+            if (restart)
+                this.rebuild_IR(to_spill, inf);
 
-        int num_temps = temps * -4;
+        } while (restart);
+
+        return new AllocInfo(graph_color.get_register(), temps);
+    }
+
+    public void emit_function(Statement s, SymbolTable st) {
+
+        HashSet<String> li = new HashSet<>(s.live_in);
+        HashSet<String> uv = new HashSet<>(s.ue_var);
+
+        li.removeAll(uv);
+
+        Stack<String> saved = new Stack<>();
+
+        for (String var : li) {
+
+            String tt = RegisterAlloc.get_alloc(var);
+            saved.push(tt);
+
+            PrintCode.print_binop("addiu", "$sp", "$sp", -4);
+            PrintCode.print_mem("sw", tt, 0, "$sp");
+        }
+
+        s.emit(st, this.head);
+
+        while (!saved.empty()) {
+
+            String tt = saved.pop();
+
+            PrintCode.print_mem("lw", tt, 0, "$sp");
+            PrintCode.print_binop("addiu", "$sp", "$sp", 4);
+        }
+    }
+
+    public void emit(SymbolTable st) {
+
+        AllocInfo alloced = this.alloc_registers(st);
+
+        Info inf = st.get(this.head.id);
+
+        int num_temps = alloced.temps_needed * -4;
+        int num_locals = inf.get_local_num();
+        int num_args = inf.get_args_num();
+
+        RegisterAlloc.alloced = alloced.registers;
 
         this.head.emit(st, this.head);
-
-        int num_locals = i.get_local_num();
-        int num_args = i.get_args_num();
-
-        i.attribute_pos(num_locals, temps);
-
-        RegisterAlloc.alloced = graph_color.get_register();
-
         this.prologue(num_locals, num_temps);
 
-        for(Statement s : this.body) {
+        inf.attribute_pos(num_locals, alloced.temps_needed);
 
-                if (s.expr instanceof Fcall) {
+        for (Statement s : this.body) {
 
-                    HashSet<String> li = new HashSet<>(s.live_in);
-                    HashSet<String> uv = new HashSet<>(s.ue_var);
+            if (s.expr instanceof Fcall)
+                this.emit_function(s, st);
 
-                    li.removeAll(uv);
-
-                    Stack<String> saved = new Stack<>();
-
-                    for(String var : li) {
-
-                        String tt = RegisterAlloc.get_alloc(var);
-                        saved.push(tt);
-
-                        PrintCode.print_binop("addiu", "$sp", "$sp", -4);
-                        PrintCode.print_mem("sw", tt, 0, "$sp");
-                    }
-
-                    s.emit(st, this.head);
-
-                    while(!saved.empty()) {
-
-                        String tt = saved.pop();
-
-                        PrintCode.print_mem("lw", tt, 0, "$sp");
-                        PrintCode.print_binop("addiu", "$sp", "$sp", 4);
-                    }
-
-                }
-
-                else {
-
-                    s.emit(st, this.head);
-                }
-
-            }
+            else
+                s.emit(st, this.head);
+        }
 
         this.epilogue(num_args, this.head.get_id());
-        
+
         System.out.println();
     }
 }

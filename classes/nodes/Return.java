@@ -62,7 +62,6 @@ public class Return implements Node {
 
     @Override
     public void change_var_kill(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
 
     }
 }

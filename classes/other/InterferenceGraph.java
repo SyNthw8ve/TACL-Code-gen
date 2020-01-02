@@ -14,48 +14,17 @@ public class InterferenceGraph {
 
     public InterferenceGraph(HashMap<String, Temp> ranges) {
 
-        nodes = new HashMap<>();
+        this.nodes = new HashMap<>();
 
-        for(HashMap.Entry<String, Temp> entry : ranges.entrySet()) {
-            
-            String key = entry.getKey();
-            
+        for(String key : ranges.keySet()) {
+
             nodes.put(key, new GraphNode(key));
         }
 
-        Collection<Temp> c_all = ranges.values();
-        Temp[] all = c_all.toArray(new Temp[c_all.size()]);
+        Collection<Temp> c_temps = ranges.values();
+        Temp[] temps = c_temps.toArray(new Temp[c_temps.size()]);
 
-        for(int i = 0; i < all.length; i++) {
-
-            Temp t = all[i];
-
-            int start = t.start;
-            int end = t.end;
-
-            for(int j = i + 1; j < all.length; j++) {
-
-                Temp tc = all[j];
-    
-                int tc_start = tc.start;
-                int tc_end = tc.end;
-    
-                if ((tc.is_copy && tc.copy.compareTo(t) == 0) || (t.is_copy && t.copy.compareTo(tc) == 0)) {
-
-
-                } 
-
-                else if ((start <= tc_start && tc_start < end) || (start < tc_end && tc_end <= end)) {
-
-                    this.add_edge(t.temp, tc.temp);
-                }
-
-                else if ((start <= tc_start && tc_end <= end) || (tc_start <= start && tc_end >= end)) {
-
-                    this.add_edge(t.temp, tc.temp);
-                }
-            }
-        }
+        this.build_graph(temps);
 
         /* for(HashMap.Entry<String, GraphNode> entry : nodes.entrySet()) {
 
@@ -71,6 +40,45 @@ public class InterferenceGraph {
 
             System.out.println();
         } */
+    }
+
+    private boolean overlap(int start, int tc_start, int end, int tc_end) {
+
+        boolean do_overlap = ((start <= tc_start && tc_start < end) ||
+                              (start < tc_end && tc_end <= end))    ||
+                             ((start <= tc_start && tc_end <= end)  ||
+                              (tc_start <= start && tc_end >= end));
+
+        return do_overlap;
+    }
+
+    private void build_graph(Temp[] temps) {
+
+        for(int i = 0; i < temps.length; i++) {
+
+            Temp t = temps[i];
+
+            int start = t.start;
+            int end = t.end;
+
+            for(int j = i + 1; j < temps.length; j++) {
+
+                Temp tc = temps[j];
+    
+                int tc_start = tc.start;
+                int tc_end = tc.end;
+    
+                if ((tc.is_copy && tc.copy.compareTo(t) == 0) || (t.is_copy && t.copy.compareTo(tc) == 0)) {
+
+
+                } 
+
+                else if (this.overlap(start, tc_start, end, tc_end)) {
+
+                    this.add_edge(t.temp, tc.temp);
+                }
+            }
+        }
     }
 
     public void add_edge(String t1, String t2) {

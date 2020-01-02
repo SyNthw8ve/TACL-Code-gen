@@ -25,7 +25,6 @@ public class Cjump implements Node {
     @Override
     public void emit(SymbolTable s, Head h) {
         
-
         String tt = RegisterAlloc.get_alloc(this.t_cond.temp);
         String lt = l_true.emit();
         String lf = l_false.emit();
@@ -61,7 +60,7 @@ public class Cjump implements Node {
 
     @Override
     public void change_var_kill(String t, Temp n_temp) {
-        // TODO Auto-generated method stub
+        
 
     }
 }
