@@ -26,10 +26,10 @@ Yylex.java : ir.lex
 
 run : $(PARSER).class
 	$(JAVACC)
-	@$(JAVA) $(PARSER) < test.in > test.out
+	@$(JAVA) $(PARSER)
 
 compile:
-	javac ./classes/nodes/*.java ./classes/other/*.java
+	$(JAVACC)
 
 clean: 
 	rm *.class
