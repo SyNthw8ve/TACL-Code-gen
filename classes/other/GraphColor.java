@@ -52,7 +52,7 @@ public class GraphColor {
 
         if (!to_color.is_empty()) {
 
-            int degree = 0;
+            int degree = -1;
             GraphNode to_spill = null;
 
             for(HashMap.Entry<String, GraphNode> entry : to_color.nodes.entrySet()) {

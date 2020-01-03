@@ -44,7 +44,7 @@ public class Unop implements Node {
 
             case NOT:
 
-                PrintCode.print_binop("nor", tt, t1, t1);
+                PrintCode.print_binop("xori", tt, t1, "1");
                 break;
 
             default:
