@@ -13,6 +13,7 @@ public class Value implements Node {
 
     public Integer value;
     public Temp target;
+    public static final int MAX = 65536;
 
     public Value(Temp t, Integer v) {
 
@@ -27,10 +28,10 @@ public class Value implements Node {
 
         int val = this.value.intValue();
 
-        if (val > 65536) {
+        if (val > MAX) {
 
-            int upper = val / 65536;
-            int lower = val % 65536;
+            int upper = val / MAX;
+            int lower = val % MAX;
 
             PrintCode.print_unop("lui", temp, upper);
             PrintCode.print_binop("ori", temp, temp, lower);

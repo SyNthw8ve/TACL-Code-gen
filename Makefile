@@ -25,7 +25,6 @@ Yylex.java : ir.lex
 
 
 run : $(PARSER).class
-	$(JAVACC)
 	@$(JAVA) $(PARSER)
 
 compile:

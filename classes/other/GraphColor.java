@@ -27,18 +27,18 @@ public class GraphColor {
 
         boolean nodes_less = true;
 
-        while(nodes_less) {
+        while (nodes_less) {
 
             nodes_less = false;
 
             Set<String> keys = new HashSet<>(to_color.nodes.keySet());
 
-            for(String key : keys) {
+            for (String key : keys) {
 
                 GraphNode node = to_color.nodes.get(key);
 
                 if (node.degree < K) {
-                    
+
                     stack.push(to_color.remove_node(node.temp));
                     nodes_less = true;
                 }
@@ -54,15 +54,21 @@ public class GraphColor {
 
             int degree = -1;
             GraphNode to_spill = null;
+            int to_spill_end = -1;
+            int to_spill_start = -1;
 
-            for(HashMap.Entry<String, GraphNode> entry : to_color.nodes.entrySet()) {
+            for (GraphNode node : to_color.nodes.values()) {
 
-                GraphNode node = entry.getValue();
-    
-                if (node.degree > degree) {
-    
+                int candidate_end = to_color.temp_ranges.get(node.temp).end;
+                int candidate_start = to_color.temp_ranges.get(node.temp).start;
+
+                if (node.degree > degree || (candidate_end > to_spill_end && node.degree >= degree)
+                        || (candidate_start < to_spill_start && node.degree >= degree)) {
+
                     degree = node.degree;
                     to_spill = node;
+                    to_spill_end = candidate_end;
+                    to_spill_start = candidate_start;
                 }
             }
 
@@ -75,13 +81,13 @@ public class GraphColor {
 
     public void select() {
 
-        while(!stack.empty()) {
+        while (!stack.empty()) {
 
             GraphNode v = stack.pop();
 
             boolean colored = pick_color(v);
 
-            if(!colored) {
+            if (!colored) {
 
                 return;
             }
@@ -97,12 +103,12 @@ public class GraphColor {
 
         HashSet<Integer> colors = new HashSet<>();
 
-        for(int i = 0; i < K; i++) {
+        for (int i = 0; i < K; i++) {
 
             colors.add(i);
         }
 
-        for(GraphNode v : g.interference) {
+        for (GraphNode v : g.interference) {
 
             if (v.is_colored) {
 
@@ -110,7 +116,8 @@ public class GraphColor {
             }
         }
 
-        if (colors.isEmpty()) return false;
+        if (colors.isEmpty())
+            return false;
 
         g.is_colored = true;
 
@@ -119,7 +126,7 @@ public class GraphColor {
             if (colors.contains(i)) {
 
                 g.color = i;
-                return true;  
+                return true;
             }
         }
 
@@ -132,18 +139,17 @@ public class GraphColor {
 
         this.select();
 
-        /* if (built) {
-
-            for(HashMap.Entry<String, GraphNode> entry : to_color.nodes.entrySet()) {
-
-                String key = entry.getKey();
-                GraphNode value = entry.getValue();
-            
-                System.out.println(key + " " + value.color);
-    
-                System.out.println();
-            }
-        } */
+        /*
+         * if (built) {
+         * 
+         * for(HashMap.Entry<String, GraphNode> entry : to_color.nodes.entrySet()) {
+         * 
+         * String key = entry.getKey(); GraphNode value = entry.getValue();
+         * 
+         * System.out.println(key + " " + value.color);
+         * 
+         * System.out.println(); } }
+         */
 
         return this.spill_candidates;
 
@@ -153,5 +159,5 @@ public class GraphColor {
 
         return this.to_color.nodes;
     }
-    
+
 }

@@ -11,10 +11,12 @@ import classes.nodes.Temp;
 public class InterferenceGraph {
 
     public HashMap<String, GraphNode> nodes;
+    public HashMap<String, Temp> temp_ranges;
 
     public InterferenceGraph(HashMap<String, Temp> ranges) {
 
         this.nodes = new HashMap<>();
+        this.temp_ranges = ranges;
 
         for(String key : ranges.keySet()) {
 
@@ -25,6 +27,7 @@ public class InterferenceGraph {
         Temp[] temps = c_temps.toArray(new Temp[c_temps.size()]);
 
         this.build_graph(temps);
+        
 
         /* for(HashMap.Entry<String, GraphNode> entry : nodes.entrySet()) {
 
@@ -47,7 +50,7 @@ public class InterferenceGraph {
         boolean do_overlap = ((start <= tc_start && tc_start < end) ||
                               (start < tc_end && tc_end <= end))    ||
                              ((start <= tc_start && tc_end <= end)  ||
-                              (tc_start <= start && tc_end >= end));
+                              (tc_start <= start && tc_end >= end)); 
 
         return do_overlap;
     }

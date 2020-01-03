@@ -39,12 +39,12 @@ public class Unop implements Node {
 
             case I_INV:
 
-                PrintCode.print_binop("or", tt, "$0", t1);
+                PrintCode.print_binop("subu", tt, "$0", t1);
                 break;
 
             case NOT:
 
-                PrintCode.print_binop("xori", tt, t1, "1");
+                PrintCode.print_binop("xori", tt, t1, 1);
                 break;
 
             default:

@@ -1,34 +1,68 @@
-javac ./classes/nodes/*.java ./classes/other/*.java
 	.data
+n:	.word 26
 	.include "tacl-io.asm"
 
 	.text
-factorial:	sw      $fp, -4($sp)
+sub:	sw      $fp, -4($sp)
+	addiu   $fp, $sp, -4   
+	sw      $ra, -4($fp)
+	addiu   $sp, $fp, -4   
+	lw      $t1, 4($fp)
+	lw      $t0, 8($fp)
+	subu    $t0, $t1, $t0
+	or      $v0, $0, $t0
+	lw      $ra, -4($fp)
+	addiu   $sp, $fp, 12   
+	lw      $fp, 0($fp)
+	jr      $ra
+
+	.text
+fibonacci:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
 	addiu   $sp, $fp, -12  
-	ori     $t0, $0, 1    
-	sw      $t0, -8($fp)
 	lw      $t1, 4($fp)
 	ori     $t0, $0, 0    
-	slt     $t0, $t0, $t1
+	xor     $t0, $t1, $t0
+	sltiu   $t0, $t0, 1    
+	bne     $t0, $0, l$0
+	j       l$3
+l$3:
+	lw      $t0, 4($fp)
+	ori     $t1, $0, 1    
+	xor     $t0, $t0, $t1
+	sltiu   $t0, $t0, 1    
 	bne     $t0, $0, l$0
 	j       l$1
 l$0:
 	lw      $t0, 4($fp)
-	sw      $t0, -12($fp)
+	sw      $t0, -8($fp)
+	j       l$2
+l$1:
 	lw      $t1, 4($fp)
 	ori     $t0, $0, 1    
 	subu    $t0, $t1, $t0
 	addiu   $sp, $sp, -4   
 	sw      $t0, 0($sp)
-	jal     factorial
+	jal     fibonacci
+	or      $t0, $0, $v0
+	sw      $t0, -12($fp)
+	lw      $t0, 4($fp)
+	ori     $t1, $0, 2    
+	addiu   $sp, $sp, -4   
+	sw      $t1, 0($sp)
+	addiu   $sp, $sp, -4   
+	sw      $t0, 0($sp)
+	jal     sub
+	or      $t0, $0, $v0
+	addiu   $sp, $sp, -4   
+	sw      $t0, 0($sp)
+	jal     fibonacci
 	or      $t1, $0, $v0
 	lw      $t0, -12($fp)
-	mult    $t0, $t1
-	mflo    $t0
+	addu    $t0, $t0, $t1
 	sw      $t0, -8($fp)
-l$1:
+l$2:
 	lw      $t0, -8($fp)
 	or      $v0, $0, $t0
 	lw      $ra, -4($fp)
@@ -41,13 +75,33 @@ l$1:
 main:	sw      $fp, -4($sp)
 	addiu   $fp, $sp, -4   
 	sw      $ra, -4($fp)
-	addiu   $sp, $fp, -4   
-	ori     $t0, $0, 10   
+	addiu   $sp, $fp, -12  
+	lw      $t0, n
 	addiu   $sp, $sp, -4   
 	sw      $t0, 0($sp)
-	jal     factorial
+	jal     fibonacci
+	or      $t0, $0, $v0
+	sw      $t0, -8($fp)
+	lw      $t0, -8($fp)
+	i_print$ $t0
+	ori     $t0, $0, 14   
+	sw      $t0, -12($fp)
+	ori     $t1, $0, 3    
+	ori     $t0, $0, 4    
+	mult    $t1, $t0
+	mflo    $t1
+	lw      $t0, -12($fp)
+	addu    $t0, $t0, $t1
+	addiu   $sp, $sp, -4   
+	sw      $t0, 0($sp)
+	jal     fibonacci
 	or      $t0, $0, $v0
 	i_print$ $t0
+	lui     $t0, 1    
+	ori     $t0, $t0, 55857
+	i_print$ $t0
+	ori     $t0, $0, 0    
+	or      $v0, $0, $t0
 	lw      $ra, -4($fp)
 	addiu   $sp, $fp, 4    
 	lw      $fp, 0($fp)

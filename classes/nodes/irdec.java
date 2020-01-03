@@ -220,13 +220,13 @@ public class IRDec {
             i++;
         }
 
-        /*
-         * for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) { String key =
-         * entry.getKey(); Temp value = entry.getValue();
-         * 
-         * System.out.println(key); System.out.println(value.start + " -> " +
-         * value.end); }
-         */
+        
+          /* for(HashMap.Entry<String, Temp> entry : temp_range.entrySet()) { String key =
+          entry.getKey(); Temp value = entry.getValue();
+         
+          System.out.println(key); System.out.println(value.start + " -> " +
+          value.end); } */
+        
     }
 
     public void rebuild_IR(LinkedList<GraphNode> spilled, Info inf) {

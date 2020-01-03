@@ -72,7 +72,7 @@ public class Binop implements Node {
             case I_LE:
 
                 PrintCode.print_binop("slt", dest, t2, t1);
-                PrintCode.print_binop("nor", dest, dest, dest);
+                PrintCode.print_binop("xori", dest, dest, 1);
                 break;
 
             case I_LT:
@@ -83,7 +83,7 @@ public class Binop implements Node {
             case I_NE:
 
                 PrintCode.print_binop("xor", dest, t1, t2);
-                PrintCode.print_binop("slt", dest, "$0", dest); 
+                PrintCode.print_binop("sltu", dest, "$0", dest); 
                 break;
         }
 
