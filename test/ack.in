@@ -1,0 +1,22 @@
+fun int ack(int m, int n)
+[
+    var int r;
+
+    if (m == 0) 
+        r = n + 1;
+    
+    else if (m > 0 && n == 0) 
+        r = ack(m - 1, 1);
+    
+
+    else if (m > 0 && n > 0) 
+        r = ack(m - 1, ack(m, n - 1));
+    
+
+    ^ r
+]
+
+proc main()
+[
+    print ack(1,1);
+]

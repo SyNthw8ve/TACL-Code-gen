@@ -140,20 +140,20 @@ public class IRDec {
             }
         }
 
-        /*
-         * for(Block b : basic_blocks) {
-         * 
-         * System.out.println(b.id);
-         * 
-         * for(int i = b.start - 1; i < b.end; i++) {
-         * 
-         * Statement s = this.body.get(i);
-         * 
-         * System.out.print("UE " + s.ue_var.toString() + " "); System.out.print("VAR "
-         * + s.var_kill.toString() + " "); System.out.print("LO " +
-         * s.live_out.toString() + " "); System.out.println("LI " +
-         * s.live_in.toString()); } }
-         */
+        
+         /* for(Block b : basic_blocks) {
+         
+         System.out.println(b.id);
+         
+         for(int i = b.start - 1; i < b.end; i++) {
+         
+         Statement s = this.body.get(i);
+         
+         System.out.print("UE " + s.ue_var.toString() + " "); System.out.print("VAR "
+         + s.var_kill.toString() + " "); System.out.print("LO " +
+         s.live_out.toString() + " "); System.out.println("LI " +
+         s.live_in.toString()); } } */
+        
     }
 
     public void live_range() {
@@ -303,7 +303,7 @@ public class IRDec {
             this.live_analysis();
             this.live_range();
 
-            InterferenceGraph IG = new InterferenceGraph(temp_range);
+            InterferenceGraph IG = new InterferenceGraph(this.temp_range);
 
             graph_color = new GraphColor(IG);
 
@@ -364,7 +364,7 @@ public class IRDec {
         this.head.emit(st, this.head);
         this.prologue(num_locals, num_temps);
 
-        inf.attribute_pos(num_locals, alloced.temps_needed);
+        inf.init_stack_positions(num_locals, alloced.temps_needed);
 
         for (Statement s : this.body) {
 

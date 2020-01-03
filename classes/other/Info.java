@@ -98,7 +98,7 @@ public class Info {
         return this.temps.get(key);
     }
 
-    public void attribute_pos(int pos, int temps) {
+    public void init_stack_positions(int pos, int temps) {
 
         for(String k : this.temps.keySet()) {
 

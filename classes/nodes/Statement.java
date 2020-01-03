@@ -35,7 +35,7 @@ public class Statement {
         for(Label l : this.labels) {
 
             String name = l.emit();
-            System.out.print(name + ":");
+            System.out.println(name + ":");
         }
 
         expr.emit(s, h);

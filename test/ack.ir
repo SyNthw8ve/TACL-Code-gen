@@ -1,0 +1,55 @@
+(id @ack fun int [(int @m) (int @n)] [(int @r)])
+(id @main fun void [] [])
+
+function @ack
+	t0 <- i_aload @m
+	t1 <- i_value 0
+	t2 <- i_eq t0, t1
+	cjump t2, l0, l1
+l0:	t3 <- i_aload @n
+	t4 <- i_value 1
+	t5 <- i_add t3, t4
+	@r <- i_lstore t5
+	jump l2
+l1:	t6 <- i_aload @m
+	t7 <- i_value 0
+	t8 <- i_lt t7, t6
+	cjump t8, l6, l4
+l6:	t9 <- i_aload @n
+	t10 <- i_value 0
+	t11 <- i_eq t9, t10
+	cjump t11, l3, l4
+l3:	t12 <- i_aload @m
+	t13 <- i_value 1
+	t14 <- i_sub t12, t13
+	t15 <- i_value 1
+	t16 <- i_call @ack, [t14,t15]
+	@r <- i_lstore t16
+	jump l5
+l4:	t17 <- i_aload @m
+	t18 <- i_value 0
+	t19 <- i_lt t18, t17
+	cjump t19, l9, l8
+l9:	t20 <- i_aload @n
+	t21 <- i_value 0
+	t22 <- i_lt t21, t20
+	cjump t22, l7, l8
+l7:	t23 <- i_aload @m
+	t24 <- i_value 1
+	t25 <- i_sub t23, t24
+	t26 <- i_aload @m
+	t27 <- i_aload @n
+	t28 <- i_value 1
+	t29 <- i_sub t27, t28
+	t30 <- i_call @ack, [t26,t29]
+	t31 <- i_call @ack, [t25,t30]
+	@r <- i_lstore t31
+l8:l5:l2:	t32 <- i_lload @r
+	i_return t32
+
+function @main
+	t0 <- i_read
+	t1 <- i_read
+	t2 <- i_call @ack, [t0,t1]
+	i_print t2
+	return

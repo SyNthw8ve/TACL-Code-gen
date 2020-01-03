@@ -75,9 +75,14 @@ public class Fcall implements Node {
     @Override
     public void change_ue_var(String t, Temp n_temp) {
         
-        for(Temp tt : this.arg_list) {
+        for(int i = 0; i < this.arg_list.size(); i++) {
 
-            if(tt.temp.compareTo(t) == 0) tt = n_temp;
+            Temp tt = this.arg_list.get(i);
+
+            if(tt.temp.compareTo(t) == 0) {
+                
+                this.arg_list.set(i, n_temp);
+            }
         }
 
     }

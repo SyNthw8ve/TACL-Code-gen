@@ -1,0 +1,42 @@
+(id @year var int 2020)
+(id @is_leap_year fun bool [(int @year)] [(bool @is_leap)])
+(id @main fun void [] [])
+
+function @is_leap_year
+	t0 <- i_aload @year
+	t1 <- i_value 4
+	t2 <- mod t0, t1
+	t3 <- i_value 0
+	t4 <- i_eq t2, t3
+	cjump t4, l0, l1
+l0:	t5 <- i_aload @year
+	t6 <- i_value 100
+	t7 <- mod t5, t6
+	t8 <- i_value 0
+	t9 <- i_eq t7, t8
+	cjump t9, l3, l4
+l3:	t10 <- i_aload @year
+	t11 <- i_value 400
+	t12 <- mod t10, t11
+	t13 <- i_value 0
+	t14 <- i_eq t12, t13
+	cjump t14, l6, l7
+l6:	t15 <- i_value 1
+	@is_leap <- i_lstore t15
+	jump l8
+l7:	t16 <- i_value 0
+	@is_leap <- i_lstore t16
+l8:	jump l5
+l4:	t17 <- i_value 1
+	@is_leap <- i_lstore t17
+l5:	jump l2
+l1:	t18 <- i_value 0
+	@is_leap <- i_lstore t18
+l2:	t19 <- i_lload @is_leap
+	i_return t19
+
+function @main
+	t0 <- i_gload @year
+	t1 <- i_call @is_leap_year, [t0]
+	b_print t1
+	return
